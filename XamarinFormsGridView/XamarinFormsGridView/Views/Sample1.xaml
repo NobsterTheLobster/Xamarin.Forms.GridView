@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:XamarinFormsGridView.Controls"
+             Title="GridViewSample1"
+             x:Class="XamarinFormsGridView.Views.Sample1">
+    <controls:GridView
+			x:Name="listView"
+            Grid.Row="1" 
+            IsGroupingEnabled="false"
+            ItemsSource="{Binding Colours}"
+            RowHeight="130"    
+			MinItemWidth="230"
+            SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
+            TappedCommand="{Binding TappedCommand}">
+        <controls:GridView.ItemTemplate>
+            <DataTemplate>
+                <controls:GridViewXamlCell>
+                    <Grid Padding="5">
+                        <Grid BackgroundColor="{Binding Color}" Padding="10" >
+                            <Label Text="{Binding Color}" FontSize="Small" TextColor="White" VerticalOptions="Start"/>
+                        </Grid>
+                    </Grid>
+                </controls:GridViewXamlCell>
+            </DataTemplate>
+        </controls:GridView.ItemTemplate>
+    </controls:GridView>
+</ContentPage>

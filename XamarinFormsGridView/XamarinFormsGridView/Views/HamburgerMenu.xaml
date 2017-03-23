@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="GridViewSample"
+             x:Class="XamarinFormsGridView.Views.HamburgerMenu">
+    <ListView x:Name="listView" IsPullToRefreshEnabled="False" ItemsSource="{Binding Pages}" SelectedItem="{Binding CurrentPage,Mode=TwoWay}">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <Grid Padding="5" HorizontalOptions="Start" >
+                        <Label LineBreakMode="WordWrap" FontSize="Medium" VerticalOptions="Center" Text="{Binding}" />
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</ContentPage>

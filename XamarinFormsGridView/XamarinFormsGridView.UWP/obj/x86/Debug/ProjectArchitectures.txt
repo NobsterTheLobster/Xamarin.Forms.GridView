@@ -1,0 +1,2 @@
+D:\Workspaces\futatill_v.next_dev_e5520\WinEposV4\Source\ftUtilities\XamarinFormsGridView\XamarinFormsGridView\XamarinFormsGridView.UWP\XamarinFormsGridView.UWP.csproj;x86
+D:\Workspaces\futatill_v.next_dev_e5520\WinEposV4\Source\ftUtilities\XamarinFormsGridView\XamarinFormsGridView\XamarinFormsGridView\XamarinFormsGridView.csproj;neutral

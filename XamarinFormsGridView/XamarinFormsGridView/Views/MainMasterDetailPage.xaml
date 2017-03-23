@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:behave="clr-namespace:XamarinFormsGridView.Behaviours"
+                  xmlns:views="clr-namespace:XamarinFormsGridView.Views"
+                  x:Class="XamarinFormsGridView.Views.MainMasterDetailPage"
+                  MasterBehavior="{Binding MenusDisplayMode, Mode=TwoWay}"
+                  IsPresented="{Binding IsPaneOpen, Mode=TwoWay}"
+                  Title="GridViewSample"
+                  behave:MasterDetailPageBehaviour.IsDynamicMasterBehaviourEnabled="True"
+                  behave:MasterDetailPageBehaviour.DynamicMasterBehaviorThreshold="720">
+    <MasterDetailPage.Master>
+        <views:HamburgerMenu/>
+    </MasterDetailPage.Master>
+    <MasterDetailPage.Detail>
+        <NavigationPage>
+            <x:Arguments>
+                <views:Sample1/>
+            </x:Arguments>
+        </NavigationPage>
+    </MasterDetailPage.Detail>
+</MasterDetailPage>
