@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/XamarinFormsGridView/v14/.suo
+/packages
+/XamarinFormsGridView/XamarinFormsGridView.Android/XamarinFormsGridView.Android.csproj.user
+/XamarinFormsGridView/XamarinFormsGridView.UWP/obj/x86/Debug
+/XamarinFormsGridView/XamarinFormsGridView/obj/Debug

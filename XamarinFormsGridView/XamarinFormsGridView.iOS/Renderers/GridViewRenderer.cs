@@ -54,65 +54,6 @@ namespace XamarinFormsGridView.iOS.Renderers
 
         #endregion
 
-        #region PaddingStuff
-
-        //bool _isPaddingInvalid;
-
-        //bool IsPaddingInvalid
-        //      { 
-        //	get { return _isPaddingInvalid; }
-        //	set { _isPaddingInvalid = value; }
-        //}
-
-        //void InvalidatePadding ()
-        //{
-        //	IsPaddingInvalid = true;
-        //	SetNeedsLayout ();
-        //}
-
-        //nfloat _previousWidth;
-
-        //public override void LayoutSubviews ()
-        //{
-        //	base.LayoutSubviews ();
-        //	_gridCollectionView.Frame = this.Bounds;
-        //	bool widthChanged = _previousWidth != _gridCollectionView.Frame.Width;
-        //	if (widthChanged) {
-        //		_previousWidth = _gridCollectionView.Frame.Width;
-        //	}
-        //	if (IsPaddingInvalid || widthChanged) {
-        //		UpdatePadding ();
-        //	}
-        //}
-
-        /// <summary>
-        /// Updates the padding for when we center the content in the gridview
-        /// </summary>
-        //void UpdatePadding ()
-        //{
-        //	if (Element == null || (ICollection)Element.ItemsSource == null) {
-        //		return;
-        //	}
-
-        //          //Get the total number of items.
-        //	var numberOfItems = ((ICollection)Element.ItemsSource).Count;
-
-        //	UICollectionViewFlowLayout flowLayout = _gridCollectionView != null ? (UICollectionViewFlowLayout)_gridCollectionView.CollectionViewLayout : null;
-
-        //	if (flowLayout != null)
-        //          {
-        //              _gridCollectionView.ContentInset = new UIEdgeInsets(0, 0, 0, 0);
-        //		flowLayout.SectionInset = new UIEdgeInsets (0, 0, 0, 0);
-
-        //		if (_gridCollectionView.Frame.Width > 0 && _gridCollectionView.Frame.Height > 0)
-        //              {
-        //			IsPaddingInvalid = false;
-        //		}
-        //	}
-        //}
-
-        #endregion
-
         #region Properties
 
 
@@ -157,8 +98,8 @@ namespace XamarinFormsGridView.iOS.Renderers
             UICollectionViewFlowLayout flowLayout = (UICollectionViewFlowLayout)_gridCollectionView.CollectionViewLayout;
 
             //Remove any section or content insets.
-            _gridCollectionView.ContentInset = new UIEdgeInsets(0, 0, 0, 0);
-            flowLayout.SectionInset = new UIEdgeInsets(0, 0, 0, 0);
+            //_gridCollectionView.ContentInset = new UIEdgeInsets(0, 0, 0, 0);
+            //flowLayout.SectionInset = new UIEdgeInsets(0, 0, 0, 0);
 
             //Remove event handling..
             Unbind(e.OldElement);
@@ -173,10 +114,7 @@ namespace XamarinFormsGridView.iOS.Renderers
             //Scroll to first item.
             ScrollToInitialIndex();
 
-
-            //			UpdatePadding ();
-            //InvalidatePadding();
-
+            //Set the native control.
             SetNativeControl(_gridCollectionView);
         }
 
@@ -310,19 +248,11 @@ namespace XamarinFormsGridView.iOS.Renderers
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         private void DataCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            //try
-            //{
             if (Control != null)
             {
                 ReloadData();
             }
-            //}
-            //catch (Exception ex)
-            //{
-            //   // Console.WriteLine("error " + ex.Message);
-            //}
         }
-
 
         void HandleOnScrolled(CGPoint contentOffset)
         {
@@ -460,8 +390,12 @@ namespace XamarinFormsGridView.iOS.Renderers
         {
             AutoresizingMask = UIViewAutoresizing.All;
             ContentMode = UIViewContentMode.ScaleToFill;
+
+            //Very important to set row and columnspacing to zero
+            //as otherwise the cells will not fill.
             RowSpacing = 0;
             ColumnSpacing = 0;
+
             RegisterClassForCell(typeof(GridViewCell), new NSString(GridViewCell.Key));
 
         }
@@ -578,8 +512,8 @@ namespace XamarinFormsGridView.iOS.Renderers
                 // We are going to re - set the Platform here because in some cases (headers mostly) its possible this is unset and
                 //   when the binding context gets updated the measure passes will all fail.By applying this here the Update call
                 // further down will result in correct layouts.
-                var p = PlatformProperty.GetValue(parent);
-                PlatformProperty.SetValue(_viewCell, p);
+                //var p = PlatformProperty.GetValue(parent);
+                //PlatformProperty.SetValue(_viewCell, p);
 
                 _viewCell.BindingContext = data;
                 _viewCell.Parent = parent;
