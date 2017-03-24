@@ -39,7 +39,7 @@ namespace XamarinFormsGridView.iOS.Renderers
         private GridDataSource _dataSource;
 
 
-        NSString cellId;
+        NSString cellId, headerId;
 
         #endregion
 
@@ -67,7 +67,7 @@ namespace XamarinFormsGridView.iOS.Renderers
             {
                 return _dataSource ??
                 (_dataSource =
-                        new GridDataSource(GetCell, RowsInSection, ItemSelected));
+                        new GridDataSource(GetCell, RowsInSection, ItemSelected, NumberOfSections, GetViewForSupplementaryElement));
             }
         }
 
@@ -94,12 +94,16 @@ namespace XamarinFormsGridView.iOS.Renderers
             _gridCollectionView.SelectionEnable = true;
             _gridCollectionView.BackgroundColor = Element.BackgroundColor.ToUIColor();
 
+            //var flowLayout = new UICollectionViewFlowLayout();
+
             //Unbox the collection view layout manager.
             UICollectionViewFlowLayout flowLayout = (UICollectionViewFlowLayout)_gridCollectionView.CollectionViewLayout;
 
+
             //Remove any section or content insets.
             //_gridCollectionView.ContentInset = new UIEdgeInsets(0, 0, 0, 0);
-            //flowLayout.SectionInset = new UIEdgeInsets(0, 0, 0, 0);
+            flowLayout.SectionInset = new UIEdgeInsets(10, 0, 10, 0);
+            //_gridCollectionView.SetCollectionViewLayout(flowLayout, false);
 
             //Remove event handling..
             Unbind(e.OldElement);
@@ -107,7 +111,7 @@ namespace XamarinFormsGridView.iOS.Renderers
             //Add event handling.
             Bind(e.NewElement);
 
-            //Set the data source.
+            //Set the data source.  
             _gridCollectionView.Source = (e.NewElement.ItemsSource != null) ? DataSource : null;
             _gridCollectionView.Delegate = new GridViewDelegate(ItemSelected, HandleOnScrolled);
 
@@ -280,10 +284,23 @@ namespace XamarinFormsGridView.iOS.Renderers
         /// <returns>System.Int32.</returns>
         public int RowsInSection(UICollectionView collectionView, nint section)
         {
-            //			var property = Element.ItemsSource.GetType ().GetProperty ("InstanceId");
-            //			string instanceId = property?.GetValue (Element.ItemsSource)?.ToString ();
-            //			Console.WriteLine (">>>>> countfrom  collection {0} is {1}", instanceId, ((ICollection)Element.ItemsSource).Count);
-            var numberOfItems = ((ICollection)Element.ItemsSource).Count;
+
+            int numberOfItems = 0;
+
+            //Get the sections.
+            var sections = Element.ItemsSource.OfType<IEnumerable>().ToList();
+
+            //If there are any sections.
+            if (sections.Any())
+            {
+                numberOfItems = sections[(int)section].Cast<object>().Count();
+            }
+            else
+            {
+                numberOfItems = ((ICollection)Element.ItemsSource).Count;
+            }
+
+
             return numberOfItems;
         }
 
@@ -294,8 +311,27 @@ namespace XamarinFormsGridView.iOS.Renderers
         /// <param name="indexPath">The index path.</param>
         public void ItemSelected(UICollectionView tableView, NSIndexPath indexPath)
         {
-            var item = Element.ItemsSource.Cast<object>().ElementAt(indexPath.Row);
+            //Get the sections.
+            var sections = Element.ItemsSource.OfType<IEnumerable>().ToList();
+
+            object item;
+
+            //If there are any sections.
+            if (sections.Any())
+            {
+                item = sections[(int)indexPath.Section].Cast<object>().ElementAt(indexPath.Row);
+            }
+            else
+            {
+                item = Element.ItemsSource.Cast<object>().ElementAt(indexPath.Row);
+            }
+
             Element.InvokeItemSelectedEvent(this, item);
+        }
+
+        public int NumberOfSections(UICollectionView collectionView)
+        {
+            return Math.Max(1, Element.ItemsSource.OfType<IEnumerable>().Count());
         }
 
         /// <summary>
@@ -307,11 +343,39 @@ namespace XamarinFormsGridView.iOS.Renderers
         public UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
             cellId = cellId ?? new NSString(GridViewCell.Key);
-            var item = Element.ItemsSource.Cast<object>().ElementAt(indexPath.Row);
+
+            //Get the sections.
+            var sections = Element.ItemsSource.OfType<IEnumerable>().ToList();
+
+            object item;
+
+            //If there are any sections.
+            if (sections.Any())
+            {
+                item = sections[(int)indexPath.Section].Cast<object>().ElementAt(indexPath.Row);
+            }
+            else
+            {
+                item = Element.ItemsSource.Cast<object>().ElementAt(indexPath.Row);
+            }
+
             var collectionCell = collectionView.DequeueReusableCell(cellId, indexPath) as GridViewCell;
 
-            collectionCell.RecycleCell(item, Element.ItemTemplate, Element);
+            collectionCell.RecycleCell(item, Element.ItemTemplate, Element, GridViewCell.Key);
             return collectionCell;
+        }
+
+        public UICollectionReusableView GetViewForSupplementaryElement(UICollectionView collectionView, NSString elementKind, NSIndexPath indexPath)
+        {
+            headerId = headerId ?? new NSString(GridViewCell.HeaderKey);
+
+            var headerCell = collectionView.DequeueReusableSupplementaryView(elementKind, headerId, indexPath) as GridViewCell;
+
+            var item = Element.ItemsSource.Cast<object>().ElementAt(indexPath.Row);
+
+            headerCell.RecycleCell(item, Element.GroupHeaderTemplate, Element, GridViewCell.HeaderKey);
+
+            return headerCell;
         }
 
         /// <summary>
@@ -397,7 +461,7 @@ namespace XamarinFormsGridView.iOS.Renderers
             ColumnSpacing = 0;
 
             RegisterClassForCell(typeof(GridViewCell), new NSString(GridViewCell.Key));
-
+            RegisterClassForSupplementaryView(typeof(GridViewCell), UICollectionElementKindSection.Header, new NSString(GridViewCell.HeaderKey));
         }
 
         /// <summary>
@@ -407,6 +471,15 @@ namespace XamarinFormsGridView.iOS.Renderers
         /// <returns>UICollectionViewCell.</returns>
         public override UICollectionViewCell CellForItem(NSIndexPath indexPath)
         {
+
+            //var section = indexPath.Section;
+
+
+            //var cell = DequeueReusableCell(new NSString(GridViewCell.Key), indexPath);
+
+            //Get the item in that section
+
+
             if (indexPath == null)
             {
                 return null;
@@ -487,19 +560,19 @@ namespace XamarinFormsGridView.iOS.Renderers
         object _originalBindingContext;
         FastGridCell _viewCell;
 
-        private static PropertyInfo _platform;
-        public static PropertyInfo PlatformProperty
-        {
-            get
-            {
-                return _platform ?? (
-                    _platform = typeof(Element).GetProperty("Platform", BindingFlags.NonPublic | BindingFlags.Instance));
-            }
-        }
+        //private static PropertyInfo _platform;
+        //public static PropertyInfo PlatformProperty
+        //{
+        //    get
+        //    {
+        //        return _platform ?? (
+        //            _platform = typeof(Element).GetProperty("Platform", BindingFlags.NonPublic | BindingFlags.Instance));
+        //    }
+        //}
 
         public FastGridCell ViewCell { get { return _viewCell; } }
 
-        public void RecycleCell(object data, DataTemplate dataTemplate, VisualElement parent)
+        public void RecycleCell(object data, DataTemplate dataTemplate, VisualElement parent, string cellType)
         {
             if (_viewCell == null)
             {
@@ -521,8 +594,17 @@ namespace XamarinFormsGridView.iOS.Renderers
                 _originalBindingContext = _viewCell.BindingContext;
                 var renderer = Platform.CreateRenderer(_viewCell.View); //RendererFactory.GetRenderer (_viewCell.View);
                 _view = renderer.NativeView;
-                _view.AutoresizingMask = UIViewAutoresizing.All;
-                _view.ContentMode = UIViewContentMode.ScaleToFill;
+
+                if (cellType == Key)
+                {
+                    _view.AutoresizingMask = UIViewAutoresizing.All;
+                    _view.ContentMode = UIViewContentMode.ScaleToFill;
+                }
+                else
+                {
+                    _view.AutoresizingMask = UIViewAutoresizing.None;
+                    _view.ContentMode = UIViewContentMode.ScaleToFill;
+                }
                 ContentView.AddSubview(_view);
                 return;
             }
@@ -542,6 +624,11 @@ namespace XamarinFormsGridView.iOS.Renderers
         public const string Key = "GridViewCell";
 
         /// <summary>
+        /// The key
+        /// </summary>
+        public const string HeaderKey = "Header";
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="GridViewCell"/> class.
         /// </summary>
         /// <param name="frame">The frame.</param>
@@ -550,7 +637,7 @@ namespace XamarinFormsGridView.iOS.Renderers
         {
             // SelectedBackgroundView = new GridItemSelectedViewOverlay (frame);
             // this.BringSubviewToFront (SelectedBackgroundView);
-           // BackgroundColor = UIColor.Black;
+            // BackgroundColor = UIColor.Black;
 
         }
 
@@ -604,17 +691,38 @@ namespace XamarinFormsGridView.iOS.Renderers
         public delegate void OnItemSelected(UICollectionView collectionView, NSIndexPath indexPath);
 
         /// <summary>
+        /// Delegate OnItemSelected
+        /// </summary>
+        /// <param name="collectionView">The collection view.</param>
+        /// <param name="indexPath">The index path.</param>
+        public delegate int OnNumberOfSections(UICollectionView collectionView);
+
+        public delegate UICollectionReusableView OnGetViewForSupplementaryElement(UICollectionView collectionView, NSString elementKind, NSIndexPath indexPath);
+
+        /// <summary>
         /// The _on get cell
         /// </summary>
         private readonly OnGetCell _onGetCell;
+
         /// <summary>
         /// The _on rows in section
         /// </summary>
         private readonly OnRowsInSection _onRowsInSection;
+
         /// <summary>
         /// The _on item selected
         /// </summary>
         private readonly OnItemSelected _onItemSelected;
+
+        /// <summary>
+        /// The _on item selected
+        /// </summary>
+        private readonly OnNumberOfSections _onNumberOfSections;
+
+        /// <summary>
+        /// The _on item selected
+        /// </summary>
+        private readonly OnGetViewForSupplementaryElement _onGetViewForSupplementaryElement;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GridDataSource"/> class.
@@ -622,14 +730,18 @@ namespace XamarinFormsGridView.iOS.Renderers
         /// <param name="onGetCell">The on get cell.</param>
         /// <param name="onRowsInSection">The on rows in section.</param>
         /// <param name="onItemSelected">The on item selected.</param>
-        public GridDataSource(OnGetCell onGetCell, OnRowsInSection onRowsInSection, OnItemSelected onItemSelected)
+        public GridDataSource(OnGetCell onGetCell,
+            OnRowsInSection onRowsInSection,
+            OnItemSelected onItemSelected,
+            OnNumberOfSections onNumberOfSections,
+            OnGetViewForSupplementaryElement onGetViewForSupplementaryElement)
         {
             _onGetCell = onGetCell;
             _onRowsInSection = onRowsInSection;
             _onItemSelected = onItemSelected;
+            _onNumberOfSections = onNumberOfSections;
+            _onGetViewForSupplementaryElement = onGetViewForSupplementaryElement;
         }
-
-        #region implemented abstract members of UICollectionViewDataSource
 
         /// <summary>
         /// Gets the items count.
@@ -640,6 +752,16 @@ namespace XamarinFormsGridView.iOS.Renderers
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
         {
             return _onRowsInSection(collectionView, section);
+        }
+
+        public override nint NumberOfSections(UICollectionView collectionView)
+        {
+            return _onNumberOfSections(collectionView);
+        }
+
+        public override UICollectionReusableView GetViewForSupplementaryElement(UICollectionView collectionView, NSString elementKind, NSIndexPath indexPath)
+        {
+            return _onGetViewForSupplementaryElement(collectionView, elementKind, indexPath);
         }
 
         /// <summary>
@@ -672,8 +794,6 @@ namespace XamarinFormsGridView.iOS.Renderers
 
             return cell;
         }
-
-        #endregion
     }
 
     #endregion
