@@ -15,31 +15,54 @@ namespace XamarinFormsGridView
     {
         #region Fields
 
+        /// <summary>
+        /// Stores the selected item.
+        /// </summary>
         object _selectedItem;
 
+        /// <summary>
+        /// Indicates the open state of the master detail page.
+        /// </summary>
         bool _isPaneOpen;
 
         /// <summary>
-        /// 
+        /// Indicates the current display mode of the master detail page.
         /// </summary>
         MasterBehavior _displayMode;
 
+        /// <summary>
+        /// Property change event.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// You can use observable collections
+        /// List of navigation pages.
         /// </summary>
         List<string> _pages;
 
-        //Or colors
+        /// <summary>
+        /// Colours source.
+        /// </summary>
         _ObservableCollection<object> _colors = new _ObservableCollection<object>();
 
+        /// <summary>
+        /// Grouped source.
+        /// </summary>
         _ObservableCollection<object> _colorsGrouped = new _ObservableCollection<object>();
 
+        /// <summary>
+        /// The current page.
+        /// </summary>
         string _currentPage;
 
+        /// <summary>
+        /// The item tapped command.
+        /// </summary>
         Command _tappedCommand;
 
+        /// <summary>
+        /// Interface for displaying page alerts.
+        /// </summary>
         IDisplayActionSheet _actionSheetDisplayer;
 
         #endregion

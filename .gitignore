@@ -7,3 +7,6 @@
 /XamarinFormsGridView/XamarinFormsGridView.Android/XamarinFormsGridView.Android.csproj.user
 /XamarinFormsGridView/XamarinFormsGridView.UWP/obj/x86/Debug
 /XamarinFormsGridView/XamarinFormsGridView/obj/Debug
+/XamarinFormsGridView/XamarinFormsGridView/bin/Debug
+/XamarinFormsGridView/XamarinFormsGridView.iOS/obj/iPhone/Debug
+/XamarinFormsGridView/XamarinFormsGridView.UWP/bin/x86/Debug
