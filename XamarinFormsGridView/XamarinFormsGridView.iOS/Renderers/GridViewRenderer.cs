@@ -97,12 +97,12 @@ namespace XamarinFormsGridView.iOS.Renderers
             //var flowLayout = new UICollectionViewFlowLayout();
 
             //Unbox the collection view layout manager.
-            UICollectionViewFlowLayout flowLayout = (UICollectionViewFlowLayout)_gridCollectionView.CollectionViewLayout;
+            //UICollectionViewFlowLayout flowLayout = (UICollectionViewFlowLayout)_gridCollectionView.CollectionViewLayout;
 
 
             //Remove any section or content insets.
             //_gridCollectionView.ContentInset = new UIEdgeInsets(0, 0, 0, 0);
-            flowLayout.SectionInset = new UIEdgeInsets(10, 0, 10, 0);
+            //flowLayout.SectionInset = new UIEdgeInsets(10, 0, 10, 0);
             //_gridCollectionView.SetCollectionViewLayout(flowLayout, false);
 
             //Remove event handling..
@@ -361,7 +361,7 @@ namespace XamarinFormsGridView.iOS.Renderers
 
             var collectionCell = collectionView.DequeueReusableCell(cellId, indexPath) as GridViewCell;
 
-            collectionCell.RecycleCell(item, Element.ItemTemplate, Element, GridViewCell.Key);
+            collectionCell.RecycleCell(item, Element.ItemTemplate, Element);
             return collectionCell;
         }
 
@@ -371,9 +371,9 @@ namespace XamarinFormsGridView.iOS.Renderers
 
             var headerCell = collectionView.DequeueReusableSupplementaryView(elementKind, headerId, indexPath) as GridViewCell;
 
-            var item = Element.ItemsSource.Cast<object>().ElementAt(indexPath.Row);
+            var item = Element.ItemsSource.Cast<object>().ElementAt(indexPath.Section);
 
-            headerCell.RecycleCell(item, Element.GroupHeaderTemplate, Element, GridViewCell.HeaderKey);
+            headerCell.RecycleCell(item, Element.GroupHeaderTemplate, Element);
 
             return headerCell;
         }
@@ -387,7 +387,23 @@ namespace XamarinFormsGridView.iOS.Renderers
             {
                 InvokeOnMainThread(() =>
                 {
-                    //UpdatePadding ();
+                    //If we are dealing with groups.
+                    if (Element.ItemsSource.OfType<IEnumerable>().Any())
+                    {
+                        //Unbox the layout.
+                        var flowLayout = ((UICollectionViewFlowLayout)_gridCollectionView.CollectionViewLayout);
+
+                        //This smells bad but I don't know of a better way to accomplish this.
+                        //I'm rendering the first header cell in order to establish the size.
+                        //Of course this means that all headers will be the same size and some
+                        //clipping could occur depdending on the data.
+                        var cell = Element.GroupHeaderTemplate.CreateContent() as ViewCell;
+                        cell.BindingContext = Element.ItemsSource.Cast<IEnumerable>().First();
+
+                        //Set the reference size accordingly.
+                        flowLayout.HeaderReferenceSize = new CGSize(Element.Width, cell.RenderHeight);
+                    }
+
                     _gridCollectionView.ReloadData();
                     _gridCollectionView.Delegate = new GridViewDelegate(ItemSelected, HandleOnScrolled);
                 }
@@ -572,14 +588,11 @@ namespace XamarinFormsGridView.iOS.Renderers
 
         public FastGridCell ViewCell { get { return _viewCell; } }
 
-        public void RecycleCell(object data, DataTemplate dataTemplate, VisualElement parent, string cellType)
+        public void RecycleCell(object data, DataTemplate dataTemplate, VisualElement parent)
         {
             if (_viewCell == null)
             {
-
-
                 _viewCell = (dataTemplate.CreateContent() as FastGridCell);
-
 
                 //reflection method of setting isplatformenabled property
                 // We are going to re - set the Platform here because in some cases (headers mostly) its possible this is unset and
@@ -595,16 +608,9 @@ namespace XamarinFormsGridView.iOS.Renderers
                 var renderer = Platform.CreateRenderer(_viewCell.View); //RendererFactory.GetRenderer (_viewCell.View);
                 _view = renderer.NativeView;
 
-                if (cellType == Key)
-                {
-                    _view.AutoresizingMask = UIViewAutoresizing.All;
-                    _view.ContentMode = UIViewContentMode.ScaleToFill;
-                }
-                else
-                {
-                    _view.AutoresizingMask = UIViewAutoresizing.None;
-                    _view.ContentMode = UIViewContentMode.ScaleToFill;
-                }
+                _view.AutoresizingMask = UIViewAutoresizing.All;
+                _view.ContentMode = UIViewContentMode.ScaleToFill;
+
                 ContentView.AddSubview(_view);
                 return;
             }
