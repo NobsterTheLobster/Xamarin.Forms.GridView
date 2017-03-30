@@ -73,7 +73,7 @@ namespace XamarinFormsGridView.Controls
         /// </summary>
         public GridView ()
 		{
-            HasUnevenRows = false;
+            //HasUnevenRows = false;
 		}
 
         #endregion

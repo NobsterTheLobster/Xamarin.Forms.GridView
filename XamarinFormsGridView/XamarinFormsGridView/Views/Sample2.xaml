@@ -9,14 +9,20 @@
             Grid.Row="1" 
             IsGroupingEnabled="true"
             ItemsSource="{Binding ColoursGrouped}"
-            RowHeight="130"    
+            HasUnevenRows="True"
 			MinItemWidth="230"
             SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
             TappedCommand="{Binding TappedCommand}">
+        <controls:GridView.RowHeight>
+            <OnPlatform x:TypeArguments="x:Int32" WinPhone="-1" iOS="130" Android="130"/>
+        </controls:GridView.RowHeight>
         <controls:GridView.ItemTemplate>
             <DataTemplate>
                 <controls:GridViewXamlCell>
                     <Grid Padding="5">
+                        <Grid.HeightRequest>
+                            <OnPlatform x:TypeArguments="x:Double" WinPhone="130"/>
+                        </Grid.HeightRequest>
                         <Grid BackgroundColor="{Binding Color}" Padding="10" >
                             <Label Text="{Binding Color}" FontSize="Small" TextColor="White" VerticalOptions="Start"/>
                         </Grid>
