@@ -1,5 +1,5 @@
 # Xamarin.Forms.GridView
-A working! GridView for xamarin forms 
+A working! GridView for xamarin forms with grouping support.
 
 Supports UWP (ItemsPanelTemplate set to ItemsWrapGrid), Android (Recycler)  and IOS (UICollectionView) 
 
@@ -7,8 +7,9 @@ The control inherits from the xamarin listview and on UWP uses the built in xama
 
 The android and ios use custom renderers. 90% of android and ios renderer code came from https://github.com/twintechs/TwinTechsFormsLib. However this solution was not working for me and so I ended up making several changes. There were also some features removed that I didn't need and/or were causing undesired behaviour. 
 
-I've also modified the renderers to support grouping however please note that the group header template is not currently working on ios.
-Also the grouping support is a little inconsitent at the moment; on ios it will handle it based on whether the provided itemsource is a collection of collections. On Android and UWP you must additionally set the IsGroupingEnabled property. On UWP this is because its a requirement of the xamarin listviewrenderer which is still being used. On Android this was simply a design choice which I may change to be more like iOS.
+I've also modified the renderers to support grouping however the grouping support is a little inconsitent at the moment; on ios it will handle it based on whether the provided itemsource is a collection of collections. On Android and UWP you must additionally set the IsGroupingEnabled property. On UWP this is because its a requirement of the xamarin listviewrenderer which is still being used. On Android this was simply a design choice which I may change to be more like iOS.
+
+Additionally on ios the header height is determined by the render height of the first header. On Android I believe the header should be dynamic for each header. On UWP the header height is the same as the row height.
 
 There are several files in the solution but for the gridview you really only need the following.
 
