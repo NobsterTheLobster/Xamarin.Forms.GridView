@@ -9,7 +9,9 @@ The android and ios use custom renderers. 90% of android and ios renderer code c
 
 I've also modified the renderers to support grouping however the grouping support is a little inconsitent at the moment; on ios it will handle it based on whether the provided itemsource is a collection of collections. On Android and UWP you must additionally set the IsGroupingEnabled property. On UWP this is because its a requirement of the xamarin listviewrenderer which is still being used. On Android this was simply a design choice which I may change to be more like iOS.
 
-Additionally on ios the header height is determined by the render height of the first header. On Android I believe the header should be dynamic for each header. On UWP the header height is the same as the row height.
+Additionally on ios the header height is determined by the render height of the first header. On Android I believe the header should be dynamic for each header. On UWP the header height will be the same as RowHeight if RowHeight is a postive value. Alternatively though you can choose not to set the RowHeight and set the property HasUnevenRows to true instead. In this configuration the height of cells are determined by the datatemplate. See Sample2.xaml for an example.
+
+![Alt text](/XamarinGridView.png?raw=true "Screenshot")
 
 There are several files in the solution but for the gridview you really only need the following.
 
