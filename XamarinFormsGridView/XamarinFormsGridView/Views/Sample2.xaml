@@ -20,10 +20,10 @@
             <DataTemplate>
                 <controls:GridViewXamlCell>
                     <Grid Padding="5">
-                        <Grid.HeightRequest>
-                            <OnPlatform x:TypeArguments="x:Double" WinPhone="130"/>
-                        </Grid.HeightRequest>
                         <Grid BackgroundColor="{Binding Color}" Padding="10" >
+                            <Grid.HeightRequest>
+                                <OnPlatform x:TypeArguments="x:Double" WinPhone="130"/>
+                            </Grid.HeightRequest>
                             <Label Text="{Binding Color}" FontSize="Small" TextColor="White" VerticalOptions="Start"/>
                         </Grid>
                     </Grid>

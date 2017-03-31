@@ -115,6 +115,25 @@ namespace XamarinFormsGridView.iOS.Renderers
             _gridCollectionView.Source = (e.NewElement.ItemsSource != null) ? DataSource : null;
             _gridCollectionView.Delegate = new GridViewDelegate(ItemSelected, HandleOnScrolled);
 
+            //If we are dealing with groups.
+            if (e.NewElement.ItemsSource != null && 
+                e.NewElement.ItemsSource.OfType<IEnumerable>().Any() && 
+                e.NewElement.GroupHeaderTemplate != null)
+            {
+                //Unbox the layout.
+                var flowLayout = ((UICollectionViewFlowLayout)_gridCollectionView.CollectionViewLayout);
+
+                //This smells bad but I don't know of a better way to accomplish this.
+                //I'm rendering the first header cell in order to establish the size.
+                //Of course this means that all headers will be the same size and some
+                //clipping could occur depdending on the data.
+                var cell = Element.GroupHeaderTemplate.CreateContent() as ViewCell;
+                cell.BindingContext = Element.ItemsSource.Cast<IEnumerable>().First();
+
+                //Set the reference size accordingly.
+                flowLayout.HeaderReferenceSize = new CGSize(Element.Width, cell.RenderHeight);
+            }
+
             //Scroll to first item.
             ScrollToInitialIndex();
 
@@ -388,7 +407,8 @@ namespace XamarinFormsGridView.iOS.Renderers
                 InvokeOnMainThread(() =>
                 {
                     //If we are dealing with groups.
-                    if (Element.ItemsSource.OfType<IEnumerable>().Any())
+                    if (Element.ItemsSource.OfType<IEnumerable>().Any() && 
+                    Element.GroupHeaderTemplate != null)
                     {
                         //Unbox the layout.
                         var flowLayout = ((UICollectionViewFlowLayout)_gridCollectionView.CollectionViewLayout);

@@ -11,3 +11,6 @@
 /XamarinFormsGridView/XamarinFormsGridView.iOS/obj/iPhone/Debug
 /XamarinFormsGridView/XamarinFormsGridView.UWP/bin/x86/Debug
 /XamarinFormsGridView/XamarinFormsGridView.iOS/bin/iPhone/Debug
+/XamarinFormsGridView/XamarinFormsGridView.iOS/bin/iPhoneSimulator/Debug
+/XamarinFormsGridView/XamarinFormsGridView.iOS/obj/iPhoneSimulator/Debug
+/XamarinFormsGridView/XamarinFormsGridView.iOS/XamarinFormsGridView.iOS.csproj.user
