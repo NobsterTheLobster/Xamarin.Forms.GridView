@@ -15,6 +15,8 @@ using Android.Content;
 using Android.OS;
 using System.Collections.Generic;
 using System.Linq;
+using Android.Graphics.Drawables;
+using Android.Support.V4.Content.Res;
 
 [assembly: ExportRenderer (typeof(FormsGridView), typeof(GridViewRenderer))]
 namespace XamarinFormsGridView.Droid.Renderers
@@ -249,6 +251,11 @@ namespace XamarinFormsGridView.Droid.Renderers
         IEnumerable _items;
 
         /// <summary>
+        /// Holds the selected items.
+        /// </summary>
+        Android.Views.View _selectedItem;
+
+        /// <summary>
         /// Holds a reference for each group and associated global index.
         /// </summary>
         Dictionary<int, int> _groupIndexDictionary = new Dictionary<int, int>();
@@ -373,6 +380,8 @@ namespace XamarinFormsGridView.Droid.Renderers
                 Element.ItemTemplate.CreateContent() as XamarinFormsGridView.Controls.FastGridCell :
                 Element.GroupHeaderTemplate.CreateContent() as XamarinFormsGridView.Controls.FastGridCell;
 
+            
+
             // reflection method of setting isplatformenabled property
             // We are going to re-set the Platform here because in some cases (headers mostly) its possible this is unset and
             // when the binding context gets updated the measure passes will all fail. By applying this here the Update call
@@ -397,6 +406,9 @@ namespace XamarinFormsGridView.Droid.Renderers
             //If there are no minimums then the view doesn't render at all.
             view.SetMinimumWidth(dpW);
             view.SetMinimumHeight(dpH);
+
+            var d = Resources.System.GetDrawable("statelist_item_background.xml");
+            view.SetBackground(d);
 
             //If not set to match parent then the view doesn't stretch to fill. 
             //This is not necessary anymore with the plaform fix above.
@@ -437,13 +449,24 @@ namespace XamarinFormsGridView.Droid.Renderers
 
         void mMainView_Click(object sender, EventArgs e)
         {
-            int position = _recyclerView.GetChildAdapterPosition((Android.Views.View)sender);
+            if (_selectedItem != null)
+            {
+                _selectedItem.Activated = false;
+            }
+
+            var newSelectedView = (Android.Views.View)sender;
+            newSelectedView.Activated = true;
+            _selectedItem = newSelectedView;
+
+            int position = _recyclerView.GetChildAdapterPosition(newSelectedView);
 
             var item = !_gridView.IsGroupingEnabled ?
                 Items.Cast<object>().ElementAt(position) :
                 _flattenedItems.ElementAt(position);
 
             Element.InvokeItemSelectedEvent(this, item);
+
+            
         }
 
         public override int ItemCount
@@ -454,6 +477,7 @@ namespace XamarinFormsGridView.Droid.Renderers
                 int count = 0;
                 int group = 0;
 
+                _selectedItem = null;
                 _groupIndexDictionary.Clear();
 
                 if (_gridView.IsGroupingEnabled) // Items.Any(IEnumerable)
@@ -507,6 +531,7 @@ namespace XamarinFormsGridView.Droid.Renderers
 
             return -1;
         }
+
     }
 
     #endregion
