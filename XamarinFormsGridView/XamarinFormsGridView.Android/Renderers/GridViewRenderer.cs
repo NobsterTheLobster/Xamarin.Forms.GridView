@@ -69,7 +69,7 @@ namespace XamarinFormsGridView.Droid.Renderers
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
-            if (e.PropertyName == "ItemsSource" || e.PropertyName == "IsGroupingEnabled") {
+            if (e.PropertyName == "ItemsSource") {
                 _adapter.Items = Element.ItemsSource;
             }
 
@@ -301,7 +301,7 @@ namespace XamarinFormsGridView.Droid.Renderers
                     newColleciton.CollectionChanged += NewColleciton_CollectionChanged;
                 }
                 NotifyDataSetChanged();
-
+                PrepareGrouping();
                 //if (Items.OfType<IEnumerable>().Any() && _gridView.IsItemsSourceGrouped)
                 //{
                 //    _flattenedItems = Items.Cast<IEnumerable>().SelectMany((r =>
@@ -347,6 +347,8 @@ namespace XamarinFormsGridView.Droid.Renderers
                 NotifyDataSetChanged();
 
             }
+
+            PrepareGrouping();
         }
 
         public GridViewAdapter(IEnumerable items, RecyclerView recyclerView, FormsGridView gridView, DisplayMetrics displayMetrics)
@@ -371,7 +373,7 @@ namespace XamarinFormsGridView.Droid.Renderers
         public override int GetItemViewType(int position)
         {
             //Default type is item
-            return _gridView.IsGroupingEnabled && _groupIndexDictionary.ContainsValue(position) ? 1 : 0;
+            return _groupIndexDictionary.ContainsValue(position) ? 1 : 0;
         }
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
@@ -379,8 +381,6 @@ namespace XamarinFormsGridView.Droid.Renderers
             var gridViewCell = viewType == 0 ?
                 Element.ItemTemplate.CreateContent() as XamarinFormsGridView.Controls.FastGridCell :
                 Element.GroupHeaderTemplate.CreateContent() as XamarinFormsGridView.Controls.FastGridCell;
-
-            
 
             // reflection method of setting isplatformenabled property
             // We are going to re-set the Platform here because in some cases (headers mostly) its possible this is unset and
@@ -440,7 +440,7 @@ namespace XamarinFormsGridView.Droid.Renderers
             //        return childItems;
             //    })).ElementAt(position);
 
-            var item = !_gridView.IsGroupingEnabled ? 
+            var item = _flattenedItems == null ? 
                 Items.Cast<object>().ElementAt(position) : 
                 _flattenedItems.ElementAt(position);
 
@@ -460,29 +460,37 @@ namespace XamarinFormsGridView.Droid.Renderers
 
             int position = _recyclerView.GetChildAdapterPosition(newSelectedView);
 
-            var item = !_gridView.IsGroupingEnabled ?
+            var item = _flattenedItems == null ?
                 Items.Cast<object>().ElementAt(position) :
                 _flattenedItems.ElementAt(position);
 
             Element.InvokeItemSelectedEvent(this, item);
-
-            
         }
 
-        public override int ItemCount
+        /// <summary>
+        /// Prepare the renderer for grouped collection.
+        /// </summary>
+        void PrepareGrouping()
         {
+            int count = 0;
+            int group = 0;
 
-            get
+            //Reset.
+            _selectedItem = null;
+            _flattenedItems = null;
+            _groupIndexDictionary.Clear();
+
+            //If there are any items.
+            if (_items != null)
             {
-                int count = 0;
-                int group = 0;
+                //Get the groups within the items source.
+                var groups = _items.OfType<IEnumerable>();
 
-                _selectedItem = null;
-                _groupIndexDictionary.Clear();
-
-                if (_gridView.IsGroupingEnabled) // Items.Any(IEnumerable)
+                //If there are any groups.
+                if (groups.Any())
                 {
-                    _flattenedItems = Items.Cast<IEnumerable>().SelectMany((r =>
+                    //Build the flattended item collection.
+                    _flattenedItems = groups.SelectMany((r =>
                     {
                         _groupIndexDictionary.Add(group++, count++);
                         var childItems = r.Cast<object>().ToList();
@@ -491,26 +499,17 @@ namespace XamarinFormsGridView.Droid.Renderers
                         return childItems;
                     }));
 
-                    //Force execution.
-                    count = _flattenedItems.Count();
                 }
-                else
-                {
-                    count = Items.Cast<object>().Count();
-                }
+            }
+        }
 
-                //foreach (var itemGroup in Items)
-                //{
-                //    //Store the group and global position (flattened index.)
-                //    _groupIndexDictionary.Add(group++, count++);
-
-                //    if (_gridView.IsItemsSourceGrouped && itemGroup is IEnumerable)
-                //    {
-                //        count += (itemGroup as IEnumerable).Cast<object>().Count();
-                //    }
-                //}
-
-                return count;
+        public override int ItemCount
+        {
+            get
+            {
+                return _flattenedItems != null ? 
+                    _flattenedItems.Count() : 
+                    Items.Cast<object>().Count();
             }
 
         }
