@@ -112,7 +112,7 @@ namespace XamarinFormsGridView.iOS.Renderers
             Bind(e.NewElement);
 
             //Set the data source.  
-            _gridCollectionView.Source = (e.NewElement.ItemsSource != null) ? DataSource : null;
+            _gridCollectionView.DataSource = (e.NewElement.ItemsSource != null) ? DataSource : null;
             _gridCollectionView.Delegate = new GridViewDelegate(ItemSelected, HandleOnScrolled);
 
             //If we are dealing with groups.
@@ -175,22 +175,11 @@ namespace XamarinFormsGridView.iOS.Renderers
             {
                 if (gridView.ItemsSource != null)
                 {
-                    _gridCollectionView.Source = DataSource;
+                    _gridCollectionView.DataSource = DataSource;
                     ReloadData();
                     ScrollToInitialIndex();
                 }
             }
-            //else if (e.PropertyName == "MinItemWidth")
-            //         {
-
-            //             //Get the span count.
-            //             //var canfit = (int)Math.Max(1, Math.Floor(gridView.Width / gridView.MinItemWidth));
-
-            //             //var actualWidth = gridView.Width / canfit;
-
-            //             _gridCollectionView.ItemSize = new CoreGraphics.CGSize(actualWidth, (float)gridView.RowHeight);
-
-            //}
         }
 
         /// <summary>
@@ -378,7 +367,21 @@ namespace XamarinFormsGridView.iOS.Renderers
                 item = Element.ItemsSource.Cast<object>().ElementAt(indexPath.Row);
             }
 
+        
+
             var collectionCell = collectionView.DequeueReusableCell(cellId, indexPath) as GridViewCell;
+            //collectionCell.SelectedBackgroundView = new UIView()
+            //{
+            //    BackgroundColor = UIColor.Red,
+            //    Hidden = false,
+
+
+            //};
+            //collectionCell.SelectedBackgroundView.Layer.RemoveAllAnimations();
+
+            //var a = NSBundle.MainBundle.LoadNib("statelist_item_background", null, null);
+            //collectionCell.SelectedBackgroundView = ObjCRuntime.Runtime.GetNSObject<UIView>(a.ValueAt(0));
+            //collectionCell.SelectedBackgroundView.Layer.RemoveAllAnimations();
 
             collectionCell.RecycleCell(item, Element.ItemTemplate, Element);
             return collectionCell;
@@ -500,29 +503,7 @@ namespace XamarinFormsGridView.iOS.Renderers
             RegisterClassForSupplementaryView(typeof(GridViewCell), UICollectionElementKindSection.Header, new NSString(GridViewCell.HeaderKey));
         }
 
-        /// <summary>
-        /// Cells for item.
-        /// </summary>
-        /// <param name="indexPath">The index path.</param>
-        /// <returns>UICollectionViewCell.</returns>
-        public override UICollectionViewCell CellForItem(NSIndexPath indexPath)
-        {
-
-            //var section = indexPath.Section;
-
-
-            //var cell = DequeueReusableCell(new NSString(GridViewCell.Key), indexPath);
-
-            //Get the item in that section
-
-
-            if (indexPath == null)
-            {
-                return null;
-            }
-            return base.CellForItem(indexPath);
-        }
-
+      
         /// <summary>
         /// Draws the specified rect.
         /// </summary>
@@ -581,6 +562,7 @@ namespace XamarinFormsGridView.iOS.Renderers
                 (CollectionViewLayout as UICollectionViewFlowLayout).ItemSize = value;
             }
         }
+
     }
 
     #endregion
@@ -592,9 +574,23 @@ namespace XamarinFormsGridView.iOS.Renderers
 	/// </summary>
 	public class GridViewCell : UICollectionViewCell
     {
+        #region Fields
+
         UIView _view;
         object _originalBindingContext;
         FastGridCell _viewCell;
+
+        CGSize _lastSize;
+
+        /// <summary>
+        /// The key
+        /// </summary>
+        public const string Key = "GridViewCell";
+
+        /// <summary>
+        /// The key
+        /// </summary>
+        public const string HeaderKey = "Header";
 
         //private static PropertyInfo _platform;
         //public static PropertyInfo PlatformProperty
@@ -606,7 +602,30 @@ namespace XamarinFormsGridView.iOS.Renderers
         //    }
         //}
 
+        #endregion
+
+        #region Properties
+
         public FastGridCell ViewCell { get { return _viewCell; } }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GridViewCell"/> class.
+        /// </summary>
+        /// <param name="frame">The frame.</param>
+        [Export("initWithFrame:")]
+        public GridViewCell(CGRect frame) : base(frame)
+        {
+            var a = NSBundle.MainBundle.LoadNib("statelist_item_background", null, null);
+            SelectedBackgroundView = ObjCRuntime.Runtime.GetNSObject<UIView>(a.ValueAt(0));
+        }
+
+        #endregion
+
+        #region Methods
 
         public void RecycleCell(object data, DataTemplate dataTemplate, VisualElement parent)
         {
@@ -644,30 +663,7 @@ namespace XamarinFormsGridView.iOS.Renderers
             }
         }
 
-        /// <summary>
-        /// The key
-        /// </summary>
-        public const string Key = "GridViewCell";
 
-        /// <summary>
-        /// The key
-        /// </summary>
-        public const string HeaderKey = "Header";
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GridViewCell"/> class.
-        /// </summary>
-        /// <param name="frame">The frame.</param>
-        [Export("initWithFrame:")]
-        public GridViewCell(CGRect frame) : base(frame)
-        {
-            // SelectedBackgroundView = new GridItemSelectedViewOverlay (frame);
-            // this.BringSubviewToFront (SelectedBackgroundView);
-            // BackgroundColor = UIColor.Black;
-
-        }
-
-        CGSize _lastSize;
 
         public override void LayoutSubviews()
         {
@@ -682,6 +678,8 @@ namespace XamarinFormsGridView.iOS.Renderers
 
             _view.Frame = ContentView.Bounds;
         }
+
+        #endregion
     }
 
     #endregion
@@ -691,8 +689,10 @@ namespace XamarinFormsGridView.iOS.Renderers
     /// <summary>
 	/// Class GridDataSource.
 	/// </summary>
-	public class GridDataSource : UICollectionViewSource
+	public class GridDataSource : UICollectionViewDataSource
     {
+        #region Fields
+
         /// <summary>
         /// Delegate OnGetCell
         /// </summary>
@@ -750,6 +750,10 @@ namespace XamarinFormsGridView.iOS.Renderers
         /// </summary>
         private readonly OnGetViewForSupplementaryElement _onGetViewForSupplementaryElement;
 
+        #endregion
+
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GridDataSource"/> class.
         /// </summary>
@@ -768,6 +772,10 @@ namespace XamarinFormsGridView.iOS.Renderers
             _onNumberOfSections = onNumberOfSections;
             _onGetViewForSupplementaryElement = onGetViewForSupplementaryElement;
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Gets the items count.
@@ -791,35 +799,17 @@ namespace XamarinFormsGridView.iOS.Renderers
         }
 
         /// <summary>
-        /// Items the selected.
-        /// </summary>
-        /// <param name="collectionView">The collection view.</param>
-        /// <param name="indexPath">The index path.</param>
-        public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
-        {
-            _onItemSelected(collectionView, indexPath);
-        }
-
-        /// <summary>
         /// Gets the cell.
         /// </summary>
         /// <param name="collectionView">The collection view.</param>
         /// <param name="indexPath">The index path.</param>
         /// <returns>UICollectionViewCell.</returns>
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
-        {
-            UICollectionViewCell cell = _onGetCell(collectionView, indexPath);
-            if ((collectionView as GridCollectionView).SelectionEnable)
-            {
-                cell.AddGestureRecognizer(new UITapGestureRecognizer((v) => {
-                    ItemSelected(collectionView, indexPath);
-                }));
-            }
-            else
-                cell.SelectedBackgroundView = new UIView();
-
-            return cell;
+        { 
+            return _onGetCell(collectionView, indexPath);
         }
+
+        #endregion
     }
 
     #endregion
@@ -831,6 +821,8 @@ namespace XamarinFormsGridView.iOS.Renderers
     /// </summary>
     public class GridViewDelegate : UICollectionViewDelegate
     {
+        #region Fields
+
         /// <summary>
         /// Delegate OnItemSelected
         /// </summary>
@@ -846,6 +838,9 @@ namespace XamarinFormsGridView.iOS.Renderers
         private readonly OnItemSelected _onItemSelected;
         private readonly OnScrolled _onScrolled;
 
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GridViewDelegate"/> class.
@@ -857,6 +852,61 @@ namespace XamarinFormsGridView.iOS.Renderers
             _onScrolled = onScrolled;
         }
 
+        #endregion
+
+        #region Highlighting
+
+        //To implement highlighting, the ItemHighlighted and ItemUnhighlighted methods of the UICollectionViewDelegate can be used.
+        //For example, the following code will apply a yellow background of the ContentView when the Cell is highlighted, 
+        //and a white background when un-highlighted.
+        //public override void ItemHighlighted(UICollectionView collectionView, NSIndexPath indexPath)
+        //{
+        //    var cell = collectionView.CellForItem(indexPath);
+        //    cell.ContentView.BackgroundColor = UIColor.Yellow;
+        //}
+
+        //public override void ItemUnhighlighted(UICollectionView collectionView, NSIndexPath indexPath)
+        //{
+        //    var cell = collectionView.CellForItem(indexPath);
+        //    cell.ContentView.BackgroundColor = UIColor.White;
+        //}
+
+        #endregion
+
+        #region DisableSelection
+
+        ///// <summary>
+        ///// Selection is enabled by default in UICollectionView. 
+        ///// To disable selection, override ShouldHighlightItem and return false as shown below:
+        ///// </summary>
+        ///// <param name="collectionView"></param>
+        ///// <param name="indexPath"></param>
+        ///// <returns></returns>
+        //public override bool ShouldHighlightItem(UICollectionView collectionView, NSIndexPath indexPath)
+        //{
+        //    return false;
+        //}
+
+        ///// <summary>
+        ///// When highlighting is disabled, the process of selecting a cell is disabled as well. 
+        ///// Additionally, there is also a ShouldSelectItem method that controls selection directly, 
+        ///// although if ShouldHighlightItem is implemented and returns false, ShouldSelectItem is not called.
+        ///// ShouldSelectItem allows selection to be turned on or off on an item-by-item basis,
+        ///// when ShouldHighlightItem is not implemented.It also allows highlighting without selection, 
+        ///// if ShouldHighlightItem is implemented and returns true, while ShouldSelectItem returns false.
+        ///// </summary>
+        ///// <param name="collectionView"></param>
+        ///// <param name="indexPath"></param>
+        ///// <returns></returns>
+        //public override bool ShouldSelectItem(UICollectionView collectionView, NSIndexPath indexPath)
+        //{
+        //    return false;
+        //}
+
+        #endregion
+
+        #region Methods
+
         /// <summary>
         /// Items the selected.
         /// </summary>
@@ -865,15 +915,7 @@ namespace XamarinFormsGridView.iOS.Renderers
         public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
         {
             _onItemSelected(collectionView, indexPath);
-        }
-
-        /// <summary>
-        /// Items the highlighted.
-        /// </summary>
-        /// <param name="collectionView">The collection view.</param>
-        /// <param name="indexPath">The index path.</param>
-        public override void ItemHighlighted(UICollectionView collectionView, NSIndexPath indexPath)
-        {
+           
         }
 
         public override void Scrolled(UIScrollView scrollView)
@@ -881,6 +923,7 @@ namespace XamarinFormsGridView.iOS.Renderers
             _onScrolled(scrollView.ContentOffset);
         }
 
+        #endregion
     }
 
     #endregion

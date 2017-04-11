@@ -18,7 +18,7 @@
                 <controls:GridViewXamlCell>
                     <Grid Padding="5">
                         <Grid BackgroundColor="{Binding Color}" Padding="10" >
-                            <Label Text="{Binding Color}" FontSize="Small" TextColor="White" VerticalOptions="Start"/>
+                            <Label Text="{Binding Color}" FontSize="Small" TextColor="White" VerticalOptions="Fill"/>
                         </Grid>
                     </Grid>
                 </controls:GridViewXamlCell>

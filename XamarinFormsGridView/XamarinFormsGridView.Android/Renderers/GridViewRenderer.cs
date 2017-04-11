@@ -431,15 +431,6 @@ namespace XamarinFormsGridView.Droid.Renderers
         {
             GridViewCell myHolder = holder as GridViewCell;
 
-            //var item = !_gridView.IsItemsSourceGrouped ?
-            //    Items.Cast<object>().ElementAt(position) :
-            //    Items.Cast<IEnumerable>().SelectMany((r =>
-            //    {
-            //        var childItems = r.Cast<object>().ToList();
-            //        childItems.Insert(0, r);
-            //        return childItems;
-            //    })).ElementAt(position);
-
             var item = _flattenedItems == null ? 
                 Items.Cast<object>().ElementAt(position) : 
                 _flattenedItems.ElementAt(position);
