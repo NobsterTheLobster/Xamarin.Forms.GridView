@@ -253,7 +253,7 @@ namespace XamarinFormsGridView.Droid.Renderers
         /// <summary>
         /// Holds the selected items.
         /// </summary>
-        Android.Views.View _selectedItem;
+        int _selectedItemPosition = -1;
 
         /// <summary>
         /// Holds a reference for each group and associated global index.
@@ -431,6 +431,8 @@ namespace XamarinFormsGridView.Droid.Renderers
         {
             GridViewCell myHolder = holder as GridViewCell;
 
+            myHolder.ItemView.Selected = _selectedItemPosition == position;
+
             var item = _flattenedItems == null ? 
                 Items.Cast<object>().ElementAt(position) : 
                 _flattenedItems.ElementAt(position);
@@ -440,16 +442,29 @@ namespace XamarinFormsGridView.Droid.Renderers
 
         void mMainView_Click(object sender, EventArgs e)
         {
-            if (_selectedItem != null)
+            //If there is a current item selected.
+            if (_selectedItemPosition >= 0)
             {
-                _selectedItem.Activated = false;
+                //Remove the activated state.
+                var previousSelection = _recyclerView.GetChildAt(_selectedItemPosition);
+
+                if (previousSelection != null)
+                {
+                    previousSelection.Selected = false;
+                }
             }
 
+            //Unbox the view.
             var newSelectedView = (Android.Views.View)sender;
-            newSelectedView.Activated = true;
-            _selectedItem = newSelectedView;
 
+            //Set selected property.
+            newSelectedView.Selected = true;
+         
+            //Get the position of this view.
             int position = _recyclerView.GetChildAdapterPosition(newSelectedView);
+
+            //Store the selected item position.
+            _selectedItemPosition = position;
 
             var item = _flattenedItems == null ?
                 Items.Cast<object>().ElementAt(position) :
@@ -467,7 +482,7 @@ namespace XamarinFormsGridView.Droid.Renderers
             int group = 0;
 
             //Reset.
-            _selectedItem = null;
+            _selectedItemPosition = -1;
             _flattenedItems = null;
             _groupIndexDictionary.Clear();
 

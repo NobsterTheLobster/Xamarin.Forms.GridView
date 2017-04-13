@@ -469,16 +469,6 @@ namespace XamarinFormsGridView.iOS.Renderers
     public class GridCollectionView : UICollectionView
     {
         /// <summary>
-        /// Gets or sets a value indicating whether [selection enable].
-        /// </summary>
-        /// <value><c>true</c> if [selection enable]; otherwise, <c>false</c>.</value>
-        public bool SelectionEnable
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="GridCollectionView"/> class.
         /// </summary>
         public GridCollectionView() : this(default(CGRect))
@@ -503,7 +493,6 @@ namespace XamarinFormsGridView.iOS.Renderers
             RegisterClassForSupplementaryView(typeof(GridViewCell), UICollectionElementKindSection.Header, new NSString(GridViewCell.HeaderKey));
         }
 
-      
         /// <summary>
         /// Draws the specified rect.
         /// </summary>
@@ -562,7 +551,6 @@ namespace XamarinFormsGridView.iOS.Renderers
                 (CollectionViewLayout as UICollectionViewFlowLayout).ItemSize = value;
             }
         }
-
     }
 
     #endregion
@@ -805,7 +793,9 @@ namespace XamarinFormsGridView.iOS.Renderers
         /// <param name="indexPath">The index path.</param>
         /// <returns>UICollectionViewCell.</returns>
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
-        { 
+        {
+
+            //tapGestureRecognizer.cancelsTouchesInView = NO;
             return _onGetCell(collectionView, indexPath);
         }
 
