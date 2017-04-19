@@ -446,11 +446,11 @@ namespace XamarinFormsGridView.Droid.Renderers
             if (_selectedItemPosition >= 0)
             {
                 //Remove the activated state.
-                var previousSelection = _recyclerView.GetChildAt(_selectedItemPosition);
+                var previousSelection = _recyclerView.FindViewHolderForAdapterPosition(_selectedItemPosition);
 
                 if (previousSelection != null)
                 {
-                    previousSelection.Selected = false;
+                    previousSelection.ItemView.Selected = false;
                 }
             }
 
