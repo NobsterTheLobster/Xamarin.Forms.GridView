@@ -91,7 +91,6 @@ namespace XamarinFormsGridView.iOS.Renderers
 
             _gridCollectionView = new GridCollectionView();
             _gridCollectionView.AllowsMultipleSelection = false;
-            _gridCollectionView.SelectionEnable = true;
             _gridCollectionView.BackgroundColor = Element.BackgroundColor.ToUIColor();
 
             //var flowLayout = new UICollectionViewFlowLayout();
