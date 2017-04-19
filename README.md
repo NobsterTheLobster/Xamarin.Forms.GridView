@@ -29,3 +29,7 @@ There are several files in the solution but for the gridview you really only nee
 3. XamarinFormsGridView/XamarinFormsGridView.UWP/Renderers/ListViewRenderer.cs
 4. XamarinFormsGridView/XamarinFormsGridView.iOS/Renderers/GridViewRenderer.cs
 5. XamarinFormsGridView/XamarinFormsGridView.Android/Renderers/GridViewRenderer.cs
+ 
+Please note if your using xamarin 2.3.5.. then you need to replace BindingFlags.NonPublic with BindingFlags.Public in the renderer for Android. I will try to fix this ASAP.
+
+
