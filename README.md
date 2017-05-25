@@ -13,7 +13,7 @@ Grouping
 ----------------
 I've also modified the renderers to support grouping however the grouping support is a little inconsistent at the moment; on ios and android it will handle it based on whether the provided itemsource is a collection of collections. On UWP you must additionally set the IsGroupingEnabled property because its a requirement of the xamarin listviewrenderer which is still being used.
 
-Additionally on ios the header height is determined by the render height of the first header. On Android I believe the header should be dynamic for each header. On UWP the header height will be the same as RowHeight if RowHeight is a postive value. Alternatively though you can choose not to set the RowHeight and set the property HasUnevenRows to true instead. In this configuration the height of cells are determined by the datatemplate. See Sample2.xaml for an example.
+Additionally on ios the header height is determined by the render height of the first header. On Android I believe the header should be dynamic for each header. On UWP the header height will be the same as RowHeight if RowHeight is a postive value. Alternatively on UWP you can choose not to set the RowHeight and set the property HasUnevenRows to true instead. In this configuration the height of cells are determined by the datatemplate. See Sample2.xaml for an example. Note that HasUnevenRows has no effect on ios/android.
 
 Selection State
 ----------------
@@ -29,3 +29,7 @@ There are several files in the solution but for the gridview you really only nee
 3. XamarinFormsGridView/XamarinFormsGridView.UWP/Renderers/ListViewRenderer.cs
 4. XamarinFormsGridView/XamarinFormsGridView.iOS/Renderers/GridViewRenderer.cs
 5. XamarinFormsGridView/XamarinFormsGridView.Android/Renderers/GridViewRenderer.cs
+ 
+Please note if your using xamarin 2.3.5.. then you need to replace BindingFlags.NonPublic with BindingFlags.Public in the renderer for Android. I will try to fix this ASAP.
+
+
