@@ -266,7 +266,8 @@ namespace XamarinFormsGridView.Droid.Renderers
             get
             {
                 return _platform ?? (
-                    _platform = typeof(Element).GetProperty("Platform", BindingFlags.NonPublic | BindingFlags.Instance));
+                    _platform = typeof(Element).GetProperty("Platform", BindingFlags.NonPublic | BindingFlags.Instance) ??
+                    typeof(Element).GetProperty("Platform", BindingFlags.Public | BindingFlags.Instance));
             }
         }
 
@@ -378,9 +379,15 @@ namespace XamarinFormsGridView.Droid.Renderers
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
+            //var selector = Element.ItemTemplate as DataTemplateSelector;
+            //if (selector != null)
+            //{
+            //    selector.SelectTemplate(item, _listView);
+            //}
+
             var gridViewCell = viewType == 0 ?
-                Element.ItemTemplate.CreateContent() as XamarinFormsGridView.Controls.FastGridCell :
-                Element.GroupHeaderTemplate.CreateContent() as XamarinFormsGridView.Controls.FastGridCell;
+            Element.ItemTemplate.CreateContent() as XamarinFormsGridView.Controls.FastGridCell :
+            Element.GroupHeaderTemplate.CreateContent() as XamarinFormsGridView.Controls.FastGridCell;
 
             // reflection method of setting isplatformenabled property
             // We are going to re-set the Platform here because in some cases (headers mostly) its possible this is unset and
@@ -398,7 +405,14 @@ namespace XamarinFormsGridView.Droid.Renderers
                 view.Click += mMainView_Click;
             }
 
-            var height = viewType == 0 ? Convert.ToInt32(Element.RowHeight) : Convert.ToInt32(gridViewCell.RenderHeight);
+            //Height of the view will be taken as RowHeight for child items
+            //and the heightrequest property of the first view in the template
+            //or the render height (whatever that is) if the heightrequest property is not defined.
+            var height = viewType == 0 ? Convert.ToInt32(Element.RowHeight) :
+                gridViewCell.View.HeightRequest != -1 ?
+                Convert.ToInt32(gridViewCell.View.HeightRequest) :
+                Convert.ToInt32(gridViewCell.RenderHeight);
+
             var width = Convert.ToInt32(Element.MinItemWidth);
             var dpW = ConvertDpToPixels(width);
             var dpH = ConvertDpToPixels(height);

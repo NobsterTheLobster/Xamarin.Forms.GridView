@@ -33,8 +33,8 @@
         <controls:GridView.GroupHeaderTemplate>
             <DataTemplate>
                 <controls:GridViewXamlCell>
-                    <Grid Padding="5">
-                        <Label FontSize="Medium" Text="{Binding Key,StringFormat='GroupID:{0}'}" TextColor="Accent"/>
+                    <Grid HeightRequest="50">
+                        <Label FontSize="Large"  VerticalTextAlignment="Center" Text="{Binding Key,StringFormat='GroupID:{0}'}" TextColor="Accent"/>
                     </Grid>
                 </controls:GridViewXamlCell>
             </DataTemplate>

@@ -91,7 +91,6 @@ namespace XamarinFormsGridView.iOS.Renderers
 
             _gridCollectionView = new GridCollectionView();
             _gridCollectionView.AllowsMultipleSelection = false;
-            _gridCollectionView.SelectionEnable = true;
             _gridCollectionView.BackgroundColor = Element.BackgroundColor.ToUIColor();
 
             //var flowLayout = new UICollectionViewFlowLayout();
@@ -131,7 +130,7 @@ namespace XamarinFormsGridView.iOS.Renderers
                 cell.BindingContext = Element.ItemsSource.Cast<IEnumerable>().First();
 
                 //Set the reference size accordingly.
-                flowLayout.HeaderReferenceSize = new CGSize(Element.Width, cell.RenderHeight);
+                flowLayout.HeaderReferenceSize = new CGSize(Element.Width, cell.View.HeightRequest != -1 ? cell.View.HeightRequest : cell.RenderHeight);
             }
 
             //Scroll to first item.
