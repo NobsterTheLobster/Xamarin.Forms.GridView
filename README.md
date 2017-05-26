@@ -22,7 +22,7 @@ ON Android you can add a drawable statelist_item_background.xml to specify the a
 
 DataTemplateSelector
 --------------------
-Due to the nature of the recycler control it is very difficult to support the datatemplateselector. I have provided a sample in the repo using a binding converter which I think is a valid workaround although I have not thoroughly tested it.
+Due to the nature of the recycler control it is very difficult to support the datatemplateselector. I have provided a sample (Sample3) in the repo using a binding converter which I think is a valid workaround although I have not thoroughly tested it.
 
 Required Files
 ----------------
@@ -33,7 +33,3 @@ There are several files in the solution but for the gridview you really only nee
 3. XamarinFormsGridView/XamarinFormsGridView.UWP/Renderers/ListViewRenderer.cs
 4. XamarinFormsGridView/XamarinFormsGridView.iOS/Renderers/GridViewRenderer.cs
 5. XamarinFormsGridView/XamarinFormsGridView.Android/Renderers/GridViewRenderer.cs
- 
-Please note if your using xamarin 2.3.5.. then you need to replace BindingFlags.NonPublic with BindingFlags.Public in the renderer for Android. I will try to fix this ASAP.
-
-
