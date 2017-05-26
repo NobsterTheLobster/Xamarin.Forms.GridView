@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:XamarinFormsGridView.Controls"
+             xmlns:converters="clr-namespace:XamarinFormsGridView.Converters"
+             xmlns:local="clr-namespace:XamarinFormsGridView"
+             x:Class="XamarinFormsGridView.Views.Sample3">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:TypeToBoolConverter x:Key="typeToBoolConverter"/>
+            <!--<DataTemplate x:Key="oddTemplate">
+                <controls:GridViewXamlCell>
+                    <Grid Padding="5">
+                        <Grid BackgroundColor="{Binding Color}" Padding="10" >
+                            <Label Text="{Binding Color}" FontSize="Small" TextColor="White" VerticalOptions="Fill"/>
+                        </Grid>
+                    </Grid>
+                </controls:GridViewXamlCell>
+            </DataTemplate>
+            <DataTemplate x:Key="evenTemplate">
+                <controls:GridViewXamlCell>
+                    <Grid Padding="5">
+                        <Grid BackgroundColor="{Binding Color}" Padding="10" >
+                            <Label Text="{Binding Color}" FontSize="Large" TextColor="White" VerticalOptions="End"/>
+                        </Grid>
+                    </Grid>
+                </controls:GridViewXamlCell>
+            </DataTemplate>-->
+            <!--<local:OddEvenColorGroupSelector x:Key="myTemplateSelector" OddTemplate="{StaticResource oddTemplate}" EvenTemplate="{StaticResource evenTemplate}" />-->
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <controls:GridView
+			x:Name="listView"
+            Grid.Row="1" 
+            IsGroupingEnabled="false"
+            ItemsSource="{Binding ColoursAndOtherThings}"
+            RowHeight="130"    
+			MinItemWidth="230"
+            SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
+            TappedCommand="{Binding TappedCommand}">
+        <!--ItemTemplate="{StaticResource myTemplateSelector}"-->
+        <controls:GridView.ItemTemplate>
+            <DataTemplate>
+                <controls:GridViewXamlCell>
+                    <Grid Padding="5">
+                        <Grid BackgroundColor="{Binding Color}" Padding="10" IsVisible="{Binding .,Converter={StaticResource typeToBoolConverter}, ConverterParameter=ColorGroup}">
+                            <Label Text="{Binding Color}" FontSize="Small" TextColor="White" VerticalOptions="Fill"/>
+                        </Grid>
+                        <Editor Text="{Binding Text}" IsVisible="{Binding .,Converter={StaticResource typeToBoolConverter}, ConverterParameter=MyOtherObject}"/>
+                    </Grid>
+                </controls:GridViewXamlCell>
+            </DataTemplate>
+        </controls:GridView.ItemTemplate>
+
+    </controls:GridView>
+
+</ContentPage>

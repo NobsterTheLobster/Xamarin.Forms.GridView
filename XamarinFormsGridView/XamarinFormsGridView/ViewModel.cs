@@ -51,6 +51,11 @@ namespace XamarinFormsGridView
         _ObservableCollection<object> _colorsGrouped = new _ObservableCollection<object>();
 
         /// <summary>
+        /// Grouped source.
+        /// </summary>
+        _ObservableCollection<object> _colorsAndOtherThings = new _ObservableCollection<object>();
+
+        /// <summary>
         /// The current page.
         /// </summary>
         string _currentPage;
@@ -129,6 +134,22 @@ namespace XamarinFormsGridView
 
                 //Notify binding targets.
                 NotifyPropertyChanged("ColoursGrouped");
+            }
+        }
+
+        /// <summary>
+        /// List of colours.
+        /// </summary>
+        public _ObservableCollection<object> ColoursAndOtherThings
+        {
+            get { return _colorsAndOtherThings; }
+            set
+            {
+                //Set value.
+                _colorsAndOtherThings = value;
+
+                //Notify binding targets.
+                NotifyPropertyChanged("ColoursAndOtherThings");
             }
         }
 
@@ -220,7 +241,7 @@ namespace XamarinFormsGridView
         public ViewModel()
         {
             //Initialize the pages collection
-            _pages = new List<string>(new string[] { "Sample1", "Sample2" });
+            _pages = new List<string>(new string[] { "Sample1", "Sample2", "Sample3" });
 
             //Set the colors data source.
             _colors.ReplaceRange(typeof(Xamarin.Forms.Color).GetRuntimeFields().Skip(9).Where(r=>r.Name != "Transparent").Select((r, index) => new ColorGroup()
@@ -229,8 +250,16 @@ namespace XamarinFormsGridView
                 GroupId = (int)Math.Ceiling(index / 10D)
             }));
 
+           
+
             //Group the colours.
             _colorsGrouped.ReplaceRange(_colors.Cast<ColorGroup>().GroupBy(r => r.GroupId));
+
+            var list = new List<object>();
+
+            list.AddRange(_colors);
+            list.AddRange(Enumerable.Repeat(new MyOtherObject(), 100));
+            _colorsAndOtherThings.AddRange(list.OrderBy(r => Guid.NewGuid()));
         }
 
         #endregion
@@ -258,6 +287,38 @@ namespace XamarinFormsGridView
         }
 
         #endregion
+    }
+
+    public class MyOtherObject : INotifyPropertyChanged
+    {
+        string _text = "The quick brown fox jumps over the lazy dog";
+
+        public string Text
+        {
+            get { return _text; }
+            set
+            {
+                _text = value;
+                NotifyPropertyChanged("Text");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Checks that there is atleast one listener 
+        /// attached before firing the PropertyChanged Event.
+        /// </summary>
+        /// <param name="info">The name of the property that has changed.</param>
+        public void NotifyPropertyChanged(String info)
+        {
+            //If the event is not nothing.
+            if (PropertyChanged != null)
+            {
+                //Fire event.
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
     }
 
     public class ColorGroup : INotifyPropertyChanged
