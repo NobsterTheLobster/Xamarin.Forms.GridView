@@ -20,6 +20,10 @@ Selection State
 The selection visual states will follow the default behaviour on UWP since the default rendererer is still being used. 
 ON Android you can add a drawable statelist_item_background.xml to specify the active (selected) state of an item.On IOS you can add a xib statelist_item_background.xib to define the selected background view. See repo for more details.
 
+DataTemplateSelector
+--------------------
+Due to the nature of the recycler control it is very difficult to support the datatemplateselector. I have provided a sample in the repo using a binding converter which I think is a valid workaround although I have not thoroughly tested it.
+
 Required Files
 ----------------
 There are several files in the solution but for the gridview you really only need the following.
