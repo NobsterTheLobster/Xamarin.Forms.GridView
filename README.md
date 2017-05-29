@@ -40,6 +40,7 @@ Alternatively you can install the nuget package https://www.nuget.org/packages/P
 
 1. The renderer doesn't appear to get loaded unless you reference it in your appdelegate.e.g.
 
+```
 public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
@@ -48,5 +49,6 @@ public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 
             return base.FinishedLaunching(app, options);
         }
+```
 
 2. For some reason the selection state xib has become mandatory. So currently you need to manually add the statelist_item_background.xib from the repo to your ios project. I haven't figured out how to do this with the nuget package manager yet.
