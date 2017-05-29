@@ -33,3 +33,6 @@ There are several files in the solution but for the gridview you really only nee
 3. XamarinFormsGridView/XamarinFormsGridView.UWP/Renderers/ListViewRenderer.cs
 4. XamarinFormsGridView/XamarinFormsGridView.iOS/Renderers/GridViewRenderer.cs
 5. XamarinFormsGridView/XamarinFormsGridView.Android/Renderers/GridViewRenderer.cs
+
+Or alternatively you can install the nuget package Plugin.GridViewControl which only contains the files listed above.
+
