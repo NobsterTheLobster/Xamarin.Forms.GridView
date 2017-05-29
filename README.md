@@ -1,4 +1,4 @@
-# Xamarin.Forms.GridView
+ # Xamarin.Forms.GridView
 A working! GridView for xamarin forms with grouping and selection visual state support.
 
 Supports UWP (ItemsPanelTemplate set to ItemsWrapGrid), Android (Recycler)  and IOS (UICollectionView) 
@@ -34,5 +34,19 @@ There are several files in the solution but for the gridview you really only nee
 4. XamarinFormsGridView/XamarinFormsGridView.iOS/Renderers/GridViewRenderer.cs
 5. XamarinFormsGridView/XamarinFormsGridView.Android/Renderers/GridViewRenderer.cs
 
-Or alternatively you can install the nuget package https://www.nuget.org/packages/Plugin.GridViewControl which only contains the files listed above.
+Nuget 
+----------------
+Alternatively you can install the nuget package https://www.nuget.org/packages/Plugin.GridViewControl which only contains the files listed above. The nuget package is a little on the experimental side at the moment. The code is the same as in the repo but there was some structural and namespace changes. I will at some stage be pushing the nuget package to the repo as well. Also there are some issues on ios at the moment. 
 
+1. The renderer doesn't appear to get loaded unless you reference it in your appdelegate.e.g.
+
+public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+        {
+            global::Xamarin.Forms.Forms.Init();
+            var x = typeof(Plugin.GridViewControl.iOS.Renderers.GridViewRenderer);
+            LoadApplication(new App());
+
+            return base.FinishedLaunching(app, options);
+        }
+
+2. For some reason the selection state xib has become mandatory. So currently you need to manually add the statelist_item_background.xib from the repo to your ios project. I haven't figured out how to do this with the nuget package manager yet.
