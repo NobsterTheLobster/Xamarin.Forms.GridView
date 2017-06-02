@@ -36,7 +36,15 @@ There are several files in the solution but for the gridview you really only nee
 
 Nuget 
 ----------------
-Alternatively you can install the nuget package https://www.nuget.org/packages/Plugin.GridViewControl which only contains the files listed above. The nuget package is a little on the experimental side at the moment. The code is the same as in the repo but there was some structural and namespace changes. I will at some stage be pushing the nuget package to the repo as well. Also there are some issues on ios at the moment. 
+Alternatively you can install the nuget package https://www.nuget.org/packages/Plugin.GridViewControl which only contains the files listed above. The nuget package is a little on the experimental side at the moment. The code is the same as in the repo but there was some structural and namespace changes. I will at some stage be pushing the nuget package to the repo as well. Note that the namespace reference should be as follows 
+
+```
+xmlns:controls="clr-namespace:Plugin.GridViewControl.Common;assembly=Plugin.GridViewControl"
+...
+<controls:GridView .../>
+```
+
+Also there are some issues on ios at the moment. 
 
 1. The renderer doesn't appear to get loaded unless you reference it in your appdelegate.e.g.
 
