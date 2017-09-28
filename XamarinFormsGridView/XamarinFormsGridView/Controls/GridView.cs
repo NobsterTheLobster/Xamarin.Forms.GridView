@@ -73,7 +73,6 @@ namespace XamarinFormsGridView.Controls
         /// </summary>
         public GridView ()
 		{
-            //HasUnevenRows = false;
 		}
 
         #endregion
@@ -93,7 +92,7 @@ namespace XamarinFormsGridView.Controls
             return (ICommand)view.GetValue(TappedCommandProperty);
         }
 
-        public static void SetTappedCommand(BindableObject view, bool value)
+        public static void SetTappedCommand(BindableObject view, ICommand value)
         {
             view.SetValue(TappedCommandProperty, value);
         }
@@ -113,31 +112,10 @@ namespace XamarinFormsGridView.Controls
             return (double)view.GetValue(MinItemWidthProperty);
         }
 
-        public static void SetMinItemWidth(BindableObject view, bool value)
+        public static void SetMinItemWidth(BindableObject view, double value)
         {
             view.SetValue(MinItemWidthProperty, value);
         }
-
-
-        ///// <summary>
-        ///// The item width property
-        ///// </summary>
-        //public static readonly BindableProperty IsItemsSourceGroupedProperty =
-        //    BindableProperty.Create(
-        //        "IsItemsSourceGrouped",
-        //        typeof(bool),
-        //        typeof(GridView),
-        //        false);
-
-        //public static double GetIsItemsSourceGrouped(BindableObject view)
-        //{
-        //    return (double)view.GetValue(IsItemsSourceGroupedProperty);
-        //}
-
-        //public static void SetIsItemsSourceGrouped(BindableObject view, bool value)
-        //{
-        //    view.SetValue(IsItemsSourceGroupedProperty, value);
-        //}
 
         #endregion
 

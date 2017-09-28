@@ -11,6 +11,9 @@
             ItemsSource="{Binding Colours}"
             RowHeight="130"    
 			MinItemWidth="230"
+            IsPullToRefreshEnabled="True"
+            RefreshCommand="{Binding RefreshCommand}"
+            IsRefreshing="{Binding IsRefreshing}"
             SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
             TappedCommand="{Binding TappedCommand}">
         <controls:GridView.ItemTemplate>

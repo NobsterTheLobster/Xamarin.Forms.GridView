@@ -26,6 +26,11 @@ namespace XamarinFormsGridView
         bool _isPaneOpen;
 
         /// <summary>
+        /// Indicates the data is loading.
+        /// </summary>
+        bool _isRefreshing;
+
+        /// <summary>
         /// Indicates the current display mode of the master detail page.
         /// </summary>
         MasterBehavior _displayMode;
@@ -63,7 +68,7 @@ namespace XamarinFormsGridView
         /// <summary>
         /// The item tapped command.
         /// </summary>
-        Command _tappedCommand;
+        Command _tappedCommand, _refreshCommand;
 
         /// <summary>
         /// Interface for displaying page alerts.
@@ -88,6 +93,24 @@ namespace XamarinFormsGridView
                         );
                 }
                 return _tappedCommand;
+            }
+        }
+
+        public Command RefreshCommand
+        {
+            get
+            {
+                //If the command is nothing.
+                if (_refreshCommand == null)
+                {
+                    //Initialize new command.
+                    _refreshCommand = new Command(
+                        async param => await LoadData()
+                        );
+                }
+
+                //Return the command.
+                return _refreshCommand;
             }
         }
 
@@ -197,6 +220,21 @@ namespace XamarinFormsGridView
                 NotifyPropertyChanged("SelectedItem");
             }
         }
+
+        /// <summary>
+        /// Gets or sets whether the component is refreshing.
+        /// </summary>
+        public bool IsRefreshing
+        {
+            get { return _isRefreshing; }
+            set
+            {
+                _isRefreshing = value;
+
+                //Notify binding targets.
+                NotifyPropertyChanged("IsRefreshing");
+            }
+        }
         
         /// <summary>
         /// 
@@ -243,14 +281,21 @@ namespace XamarinFormsGridView
             //Initialize the pages collection
             _pages = new List<string>(new string[] { "Sample1", "Sample2", "Sample3" });
 
+            //Load the data asynchronously.
+            LoadData();
+        }
+
+        /// <summary>
+        /// Load the data for the view model.
+        /// </summary>
+        private async Task LoadData()
+        {
             //Set the colors data source.
-            _colors.ReplaceRange(typeof(Xamarin.Forms.Color).GetRuntimeFields().Skip(9).Where(r=>r.Name != "Transparent").Select((r, index) => new ColorGroup()
+            _colors.ReplaceRange(typeof(Xamarin.Forms.Color).GetRuntimeFields().Skip(9).Where(r => r.Name != "Transparent").Select((r, index) => new ColorGroup()
             {
                 Color = r.Name.ToString(),
                 GroupId = (int)Math.Ceiling(index / 10D)
             }));
-
-           
 
             //Group the colours.
             _colorsGrouped.ReplaceRange(_colors.Cast<ColorGroup>().GroupBy(r => r.GroupId));
@@ -260,6 +305,9 @@ namespace XamarinFormsGridView
             list.AddRange(_colors);
             list.AddRange(Enumerable.Repeat(new MyOtherObject(), 100));
             _colorsAndOtherThings.AddRange(list.OrderBy(r => Guid.NewGuid()));
+
+            //Notification that refresh is complete.
+            IsRefreshing = false;
         }
 
         #endregion

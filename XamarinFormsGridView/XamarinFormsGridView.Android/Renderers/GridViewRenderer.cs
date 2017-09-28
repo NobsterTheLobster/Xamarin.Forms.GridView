@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Android.Graphics.Drawables;
 using Android.Support.V4.Content.Res;
+using Android.Support.V4.Widget;
 
 [assembly: ExportRenderer (typeof(FormsGridView), typeof(GridViewRenderer))]
 namespace XamarinFormsGridView.Droid.Renderers
@@ -26,13 +27,15 @@ namespace XamarinFormsGridView.Droid.Renderers
     /// <summary>
     /// Renderer for GridView control on Android.
     /// </summary>
-    public class GridViewRenderer : ViewRenderer<FormsGridView, RecyclerView>
+    public class GridViewRenderer : ViewRenderer<FormsGridView, SwipeRefreshLayout>
     {
         #region Fields
 
         readonly Android.Content.Res.Orientation _orientation = Android.Content.Res.Orientation.Undefined;
 
         ScrollRecyclerView _recyclerView;
+        SwipeRefreshLayout _pullToRefresh;
+
 
         float _startEventY;
         float _heightChange;
@@ -58,8 +61,9 @@ namespace XamarinFormsGridView.Droid.Renderers
             {
                 DestroyRecyclerview();
                 CreateRecyclerView();
-                base.SetNativeControl(_recyclerView);
+                base.SetNativeControl(_pullToRefresh);
             }
+
 
             //TODO unset
             //			this.Unbind (e.OldElement);
@@ -72,16 +76,18 @@ namespace XamarinFormsGridView.Droid.Renderers
             if (e.PropertyName == "ItemsSource") {
                 _adapter.Items = Element.ItemsSource;
             }
-
-            //			if (e.PropertyName == "IsScrollEnabled") {
-            //				Device.BeginInvokeOnMainThread (() => {
-            //					_recyclerView.Enabled = Element.IsScrollEnabled;
-            ////					Debug.WriteLine ("scroll enabled changed to " + _gridCollectionView.ScrollEnabled);
-            //				}
-            //				);
-
-
-            //			}
+            //If the element IsRefreshing property is changing.
+            else if (e.PropertyName == "IsRefreshing")
+            {
+                //Indicate whether the control is refreshing.
+                _pullToRefresh.Refreshing = Element.IsRefreshing;
+            }
+            //If the element PullToRefresh property is changing.
+            else if (e.PropertyName == "IsPullToRefreshEnabled")
+            {
+                //Indicate whether pull to refresh is enabled.
+                _pullToRefresh.Enabled = Element.IsPullToRefreshEnabled;
+            }
         }
 
         protected override void OnSizeChanged(int w, int h, int oldw, int oldh)
@@ -105,6 +111,7 @@ namespace XamarinFormsGridView.Droid.Renderers
 
         void CreateRecyclerView()
         {
+           
             _recyclerView = new ScrollRecyclerView(Android.App.Application.Context);
             _recyclerView.Touch += _recyclerView_Touch;
             var scrollListener = new GridViewScrollListener(Element, _recyclerView);
@@ -117,7 +124,44 @@ namespace XamarinFormsGridView.Droid.Renderers
             _adapter = new GridViewAdapter(Element.ItemsSource, _recyclerView, Element, Resources.DisplayMetrics);
             _recyclerView.SetAdapter(_adapter);
 
+            //Initialize the pull to refresh host.
+            _pullToRefresh = new SwipeRefreshLayout(Android.App.Application.Context);
+
+            //Add the recylcler to the refresh host.
+            _pullToRefresh.AddView(_recyclerView);
+
+            //Attach event handling for refresh.
+            _pullToRefresh.Refresh += _pullToRefresh_Refresh;
+
+            //Enable/Disable pull to refresh.
+            _pullToRefresh.Enabled = Element.IsPullToRefreshEnabled;
+
+            //Set the current refresh status.
+            _pullToRefresh.Refreshing = Element.IsRefreshing;
+
+            //Update the grid layout.
             UpdateGridLayout();
+        }
+
+        /// <summary>
+        /// Call back to refresh the data.
+        /// </summary>
+        /// <param name="sender">System.Object repersenting the source of the event.</param>
+        /// <param name="e">The arguments for the event.</param>
+        void _pullToRefresh_Refresh(object sender, EventArgs e)
+        {
+            //If there is a command associated.
+            if (Element.RefreshCommand != null)
+            {
+                //Call the command.
+                Element.IsRefreshing = true;
+                Element.RefreshCommand.Execute(null);
+            }
+            else
+            {
+                //Indicate to the view we are no longer refreshing.
+                _pullToRefresh.Refreshing = false;
+            }
         }
 
         /// <summary>
@@ -168,6 +212,9 @@ namespace XamarinFormsGridView.Droid.Renderers
 
     #endregion
 
+
+    #region GroupedGridSpanSizeLookup
+
     public class GroupedGridSpanSizeLookup : GridLayoutManager.SpanSizeLookup
     {
         GridViewAdapter _adapter;
@@ -185,6 +232,7 @@ namespace XamarinFormsGridView.Droid.Renderers
         }
     }
 
+    #endregion
 
     #region ScrollRecyclerView
 
@@ -303,17 +351,7 @@ namespace XamarinFormsGridView.Droid.Renderers
                 }
                 NotifyDataSetChanged();
                 PrepareGrouping();
-                //if (Items.OfType<IEnumerable>().Any() && _gridView.IsItemsSourceGrouped)
-                //{
-                //    _flattenedItems = Items.Cast<IEnumerable>().SelectMany((r =>
-                //     {
-                //         var childItems = r.Cast<object>().ToList();
-                //         childItems.Insert(0, r);
-                //         return childItems;
-                //     }));
-                //}
             }
-
         }
 
         void NewColleciton_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
