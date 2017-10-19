@@ -20,6 +20,10 @@ Selection State
 The selection visual states will follow the default behaviour on UWP since the default rendererer is still being used. 
 ON Android you can add a drawable statelist_item_background.xml to specify the active (selected) state of an item.On IOS you can add a xib statelist_item_background.xib to define the selected background view. See repo for more details.
 
+Pull To Refresh
+----------------
+Pull to Refresh is supported and I reckon it should behave as you would expect.
+
 DataTemplateSelector
 --------------------
 Due to the nature of the recycler control it is very difficult to support the datatemplateselector. I have provided a sample (Sample3) in the repo using a binding converter which I think is a valid workaround although I have not thoroughly tested it.
@@ -28,11 +32,11 @@ Required Files
 ----------------
 There are several files in the solution but for the gridview you really only need the following.
 
-1. XamarinFormsGridView/XamarinFormsGridView/Controls/GridView.cs
-2. XamarinFormsGridView/XamarinFormsGridView/Controls/FastGridCell.cs
-3. XamarinFormsGridView/XamarinFormsGridView.UWP/Renderers/ListViewRenderer.cs
-4. XamarinFormsGridView/XamarinFormsGridView.iOS/Renderers/GridViewRenderer.cs
-5. XamarinFormsGridView/XamarinFormsGridView.Android/Renderers/GridViewRenderer.cs
+1. Plugin.GridViewControl/Plugin.GridViewControl/Common/GridView.cs
+2. Plugin.GridViewControl/Plugin.GridViewControl/Common/FastGridCell.cs
+3. Plugin.GridViewControl/Plugin.GridViewControl.Android/Renderers/GridViewRenderer.cs
+4. Plugin.GridViewControl/Plugin.GridViewControl.iOS/Renderers/GridViewRenderer.cs
+5. Plugin.GridViewControl/Plugin.GridViewControl.UWP/Renderers/GridViewRenderer.cs
 
 Nuget 
 ----------------
@@ -44,7 +48,7 @@ xmlns:controls="clr-namespace:Plugin.GridViewControl.Common;assembly=Plugin.Grid
 <controls:GridView .../>
 ```
 
-Also there are some issues on ios at the moment. 
+Also there are a couple of things to note from an iOS perspective.
 
 1. The renderer doesn't appear to get loaded unless you reference it in your appdelegate.e.g.
 
