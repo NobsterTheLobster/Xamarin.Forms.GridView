@@ -1,5 +1,5 @@
  # Xamarin.Forms.GridView
-A working! GridView for xamarin forms with grouping and selection visual state support.
+A working! GridView for xamarin forms with grouping, pull to refresh and selection visual state support.
 
 Supports UWP (ItemsPanelTemplate set to ItemsWrapGrid), Android (Recycler)  and IOS (UICollectionView) 
 
