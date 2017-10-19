@@ -4,14 +4,25 @@ using Xamarin.Forms;
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace XamarinFormsGridView.Controls
+namespace Plugin.GridViewControl.Common
 {
     #region IGridViewProvider
 
+    /// <summary>
+    /// Interface for providing scroll access to underlying grid control
+    /// </summary>
     public interface IGridViewProvider
 	{
+        /// <summary>
+        /// Repopulate the grid view with items.
+        /// </summary>
 		void ReloadData ();
 
+        /// <summary>
+        /// Scroll to the item at the specified index.
+        /// </summary>
+        /// <param name="index">The index to scroll to.</param>
+        /// <param name="animated">Whether the scrolling should be animated.</param>
 		void ScrollToItemWithIndex (int index, bool animated);
 	}
 
@@ -19,12 +30,26 @@ namespace XamarinFormsGridView.Controls
 
     #region ControlScrollEventArgs
 
+    /// <summary>
+    /// Arguments for a scroll event on the gridview.
+    /// </summary>
     public class ControlScrollEventArgs : EventArgs
     {
+        /// <summary>
+        /// The delta.
+        /// </summary>
         public float Delta { get; set; }
 
+        /// <summary>
+        /// The current vertical position.
+        /// </summary>
         public float CurrentY { get; set; }
 
+        /// <summary>
+        /// Initialize a new instance of the ControlScrollEventArgs
+        /// </summary>
+        /// <param name="delta">The delta</param>
+        /// <param name="currentY">The current vertical position.</param>
         public ControlScrollEventArgs(float delta, float currentY)
         {
             this.Delta = delta;
@@ -36,16 +61,41 @@ namespace XamarinFormsGridView.Controls
 
     #region IScrollAwareElement
 
+    /// <summary>
+    /// Interface for providing scrol awareness.
+    /// </summary>
     public interface IScrollAwareElement
     {
+        /// <summary>
+        /// When the scrolling begins.
+        /// </summary>
         event EventHandler OnStartScroll;
+
+        /// <summary>
+        /// When the scrolling ends.
+        /// </summary>
         event EventHandler OnStopScroll;
+
+        /// <summary>
+        /// When the list is scrolled.
+        /// </summary>
         event EventHandler<ControlScrollEventArgs> OnScroll;
 
+        /// <summary>
+        /// Raise the on scroll event.
+        /// </summary>
+        /// <param name="delta">The delta.</param>
+        /// <param name="currentY">The current position.</param>
         void RaiseOnScroll(float delta, float currentY);
 
+        /// <summary>
+        /// Raise the start scroll event.
+        /// </summary>
         void RaiseOnStartScroll();
 
+        /// <summary>
+        /// Raise the stop scroll event.
+        /// </summary>
         void RaiseOnStopScroll();
     }
 
@@ -68,18 +118,21 @@ namespace XamarinFormsGridView.Controls
 
         #region Constructor
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GridView"/> class.
         /// </summary>
         public GridView ()
 		{
-        }
+            //HasUnevenRows = false;
+		}
 
         #endregion
 
         #region Bindable Properties
 
+        /// <summary>
+        /// Command for when a child item is pressed.
+        /// </summary>
         public static readonly BindableProperty TappedCommandProperty =
           BindableProperty.CreateAttached(
               "TappedCommand",
@@ -88,12 +141,22 @@ namespace XamarinFormsGridView.Controls
               null,
               propertyChanged: OnTappedCommandPropertyChanged);
 
+        /// <summary>
+        /// Gets the tapped command on the specified view.
+        /// </summary>
+        /// <param name="view">The view to retrieve the property from.</param>
+        /// <returns>The tapped command from the specified view.</returns>
         public static ICommand GetTappedCommand(BindableObject view)
         {
             return (ICommand)view.GetValue(TappedCommandProperty);
         }
 
-        public static void SetTappedCommand(BindableObject view, ICommand value)
+        /// <summary>
+        /// Sets the tapped command on the specified view.
+        /// </summary>
+        /// <param name="view">The view to set the property on.</param>
+        /// <param name="value">The value of the property.</param>
+        public static void SetTappedCommand(BindableObject view, bool value)
         {
             view.SetValue(TappedCommandProperty, value);
         }
@@ -108,12 +171,22 @@ namespace XamarinFormsGridView.Controls
                 typeof(GridView),
                 (double)100D);
 
+        /// <summary>
+        /// Get the min item width from the specified view.
+        /// </summary>
+        /// <param name="view">The view to retrieve the property from.</param>
+        /// <returns>The value of the min item width from the specified view.</returns>
         public static double GetMinItemWidth(BindableObject view)
         {
             return (double)view.GetValue(MinItemWidthProperty);
         }
 
-        public static void SetMinItemWidth(BindableObject view, double value)
+        /// <summary>
+        /// Sets the min item width on the specified view.
+        /// </summary>
+        /// <param name="view">the view to set the property on.</param>
+        /// <param name="value">The value of the property.</param>
+        public static void SetMinItemWidth(BindableObject view, bool value)
         {
             view.SetValue(MinItemWidthProperty, value);
         }
@@ -248,10 +321,26 @@ namespace XamarinFormsGridView.Controls
 
         #region ISCrollAwareElement
 
+        /// <summary>
+        /// When scrolling begins.
+        /// </summary>
         public event EventHandler OnStartScroll;
+
+        /// <summary>
+        /// When scrolling ends.
+        /// </summary>
 		public event EventHandler OnStopScroll;
+
+        /// <summary>
+        /// When the list is scrolled.
+        /// </summary>
 		public event EventHandler<ControlScrollEventArgs> OnScroll;
 
+        /// <summary>
+        /// Raise the on scroll event.
+        /// </summary>
+        /// <param name="delta">The delta.</param>
+        /// <param name="currentY">The current position.</param>
 		public void RaiseOnScroll (float delta, float currentY)
 		{
 			var args = new ControlScrollEventArgs (delta, currentY);
@@ -260,6 +349,9 @@ namespace XamarinFormsGridView.Controls
 			}
 		}
 
+        /// <summary>
+        /// Raise the start scroll event.
+        /// </summary>
 		public void RaiseOnStartScroll ()
 		{
 			if (OnStartScroll != null) {
@@ -267,6 +359,9 @@ namespace XamarinFormsGridView.Controls
 			}
 		}
 
+        /// <summary>
+        /// Raise the stop scroll event.
+        /// </summary>
 		public void RaiseOnStopScroll ()
 		{
 			if (OnStopScroll != null) {

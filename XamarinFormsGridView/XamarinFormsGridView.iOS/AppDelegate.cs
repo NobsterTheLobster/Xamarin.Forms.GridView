@@ -23,6 +23,8 @@ namespace XamarinFormsGridView.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            var x = typeof(Plugin.GridViewControl.iOS.Renderers.GridViewRenderer);
+
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

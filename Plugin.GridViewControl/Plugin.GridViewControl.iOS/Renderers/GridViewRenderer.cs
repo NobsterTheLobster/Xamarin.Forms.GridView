@@ -5,14 +5,14 @@ using System.Linq;
 using Foundation;
 using UIKit;
 using Xamarin.Forms;
-using XamarinFormsGridView.Controls;
-using XamarinFormsGridView.iOS.Renderers;
+using Plugin.GridViewControl.Common;
+using Plugin.GridViewControl.iOS.Renderers;
 using Xamarin.Forms.Platform.iOS;
 using CoreGraphics;
 using System.Reflection;
 
 [assembly: ExportRenderer (typeof(GridView), typeof(GridViewRenderer))]
-namespace XamarinFormsGridView.iOS.Renderers
+namespace Plugin.GridViewControl.iOS.Renderers
 {
     #region GridViewRenderer
 
@@ -159,7 +159,8 @@ namespace XamarinFormsGridView.iOS.Renderers
             //If the refresh command is not nothing.
             if (Element.RefreshCommand != null)
             {
-
+                Element.IsRefreshing = true;
+                Element.RefreshCommand.Execute(null);
             }
             else
             {
@@ -207,6 +208,18 @@ namespace XamarinFormsGridView.iOS.Renderers
                     ReloadData();
                     ScrollToInitialIndex();
                 }
+            }
+            //If the element IsRefreshing property is changing to false.
+            else if (e.PropertyName == "IsRefreshing" && !Element.IsRefreshing)
+            {
+                //Stop refreshing.
+                _pullToRefresh.EndRefreshing();
+            }
+            //If the element PullToRefresh property is changing.
+            else if (e.PropertyName == "IsPullToRefreshEnabled")
+            {
+                //Indicate whether pull to refresh is enabled.
+                _pullToRefresh.Enabled = Element.IsPullToRefreshEnabled;
             }
         }
 
