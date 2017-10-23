@@ -22,7 +22,7 @@ ON Android you can add a drawable statelist_item_background.xml to specify the a
 
 Pull To Refresh
 ----------------
-Pull to Refresh is supported and I reckon it should behave as you would expect i.e. You first set the IsPullToRefresh property to be enabled. Then you need to attach the RefreshCommand to your view model. When the user pulls down on the items control a busy animation will appear, the RefreshCommand will be exceuted and the IsRefreshing property will be set to true. When your view model has finished loading the data you need to set the IsRefreshing property back to false typically via a binding in your view model. Once the IsRefreshing property is set back to false the busy animation will disappear. 
+Pull to Refresh is supported and I reckon it should behave as you would expect i.e. You first set the IsPullToRefreshEnabled property to true. Then you need to attach the RefreshCommand to your view model. When the user pulls down on the items control a busy animation will appear, the RefreshCommand will be exceuted and the IsRefreshing property will be set to true. When your view model has finished loading the data you need to set the IsRefreshing property back to false typically via a binding in your view model. Once the IsRefreshing property is set back to false the busy animation will disappear. 
 
 DataTemplateSelector
 --------------------
