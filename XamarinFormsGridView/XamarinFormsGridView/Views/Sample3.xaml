@@ -37,7 +37,8 @@
             RowHeight="130"    
 			MinItemWidth="230"
             SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
-            TappedCommand="{Binding TappedCommand}">
+            TappedCommand="{Binding TappedCommand}"
+            HoldCommand="{Binding HoldCommand}">
         <!--ItemTemplate="{StaticResource myTemplateSelector}"-->
         <controls:GridView.ItemTemplate>
             <DataTemplate>

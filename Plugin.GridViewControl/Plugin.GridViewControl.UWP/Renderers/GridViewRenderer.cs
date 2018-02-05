@@ -4,6 +4,9 @@ using Xamarin.Forms.Platform.UWP;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Markup;
 using System.ComponentModel;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml;
+using Plugin.GridViewControl.Common;
 
 [assembly: ExportRenderer(typeof(Plugin.GridViewControl.Common.GridView), typeof(GridViewRenderer))]
 namespace Plugin.GridViewControl.UWP.Renderers
@@ -33,6 +36,19 @@ namespace Plugin.GridViewControl.UWP.Renderers
 
                     baseList.ItemsPanel = (ItemsPanelTemplate)XamlReader.Load(template);
                 }
+
+                baseList.RightTapped += OnRightTapped;
+            }
+        }
+
+        private void OnRightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            if (Element is Common.GridView gridView)
+            {
+                var source = (FrameworkElement)e.OriginalSource;
+                var item = (GridViewXamlCell)source.DataContext;
+                var context = item.BindingContext;
+                gridView.RaiseOnItemHold(context);
             }
         }
 

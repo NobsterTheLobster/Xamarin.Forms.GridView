@@ -211,6 +211,51 @@ namespace Plugin.GridViewControl.Common
         }
 
         /// <summary>
+        /// Command for when a child item is hold.
+        /// </summary>
+        public static readonly BindableProperty HoldCommandProperty =
+          BindableProperty.CreateAttached(
+              "HoldCommand",
+              typeof(ICommand),
+              typeof(GridView),
+              null);
+
+        /// <summary>
+        /// Gets the hold command on the specified view
+        /// </summary>
+        /// <param name="view">The view to retrieve the property from.</param>
+        /// <returns>The hold command from the specified view.</returns>
+        public static ICommand GetHoldCommand(BindableObject view)
+        {
+            return (ICommand)view.GetValue(HoldCommandProperty);
+        }
+
+        /// <summary>
+        /// Sets the hold command on the specified view.
+        /// </summary>
+        /// <param name="view">The view to set the property on.</param>
+        /// <param name="value">The value of the property.</param>
+        public static void SetHoldCommand(BindableObject view, bool value)
+        {
+            view.SetValue(HoldCommandProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the tapped command
+        /// </summary>
+        public ICommand HoldCommand
+        {
+            get
+            {
+                return (ICommand)GetValue(HoldCommandProperty);
+            }
+            set
+            {
+                SetValue(TappedCommandProperty, value);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the grid view provider.
         /// </summary>
 		public IGridViewProvider GridViewProvider {
@@ -369,8 +414,37 @@ namespace Plugin.GridViewControl.Common
 			}
 		}
 
-		#endregion
+        #endregion
+        /// <summary>
+        /// This event is raised when the user long clicks an item.
+        /// </summary>
+        public event EventHandler<ItemHoldEventArgs> OnItemHold;
+
+        /// <summary>
+        /// Raise the item hold event.
+        /// </summary>
+        /// <param name="item"></param>
+        public void RaiseOnItemHold(object item)
+        {
+            OnItemHold?.Invoke(this, new ItemHoldEventArgs(item));
+            var cmd = HoldCommand;
+            if (cmd == null)
+                return;
+
+            if (cmd.CanExecute(item))
+                cmd.Execute(item);
+        }
 	}
+
+    public class ItemHoldEventArgs
+    {
+        public ItemHoldEventArgs(object item)
+        {
+            Item = item;
+        }
+
+        public object Item { get; }
+    }
 
     #endregion
 }

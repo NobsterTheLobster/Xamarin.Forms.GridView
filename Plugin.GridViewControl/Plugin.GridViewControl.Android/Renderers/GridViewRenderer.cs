@@ -292,7 +292,7 @@ namespace Plugin.GridViewControl.Droid.Renderers
 
     #region GridViewAdapter
 
-    public class GridViewAdapter : RecyclerView.Adapter
+    public class GridViewAdapter : RecyclerView.Adapter, Android.Views.View.IOnLongClickListener
     {
         RecyclerView _recyclerView;
         IEnumerable _items;
@@ -466,6 +466,7 @@ namespace Plugin.GridViewControl.Droid.Renderers
             //view.LayoutParameters = new GridLayoutManager.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
 
             //Wrap the view.
+            view.SetOnLongClickListener(this);
             GridViewCell myView = new GridViewCell(view);
 
             //return the view.
@@ -588,6 +589,13 @@ namespace Plugin.GridViewControl.Droid.Renderers
             return -1;
         }
 
+        public bool OnLongClick(Android.Views.View v)
+        {
+            var view = (GridViewCellContainer)v;
+            var item = view.Element.BindingContext;
+            _gridView.RaiseOnItemHold(item);
+            return true;
+        }
     }
 
     #endregion

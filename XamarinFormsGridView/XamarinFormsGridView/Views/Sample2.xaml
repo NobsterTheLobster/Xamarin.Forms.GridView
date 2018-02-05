@@ -12,7 +12,8 @@
             HasUnevenRows="True"
 			MinItemWidth="230"
             SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
-            TappedCommand="{Binding TappedCommand}">
+            TappedCommand="{Binding TappedCommand}"
+            HoldCommand="{Binding HoldCommand}">
         <controls:GridView.RowHeight>
             <OnPlatform x:TypeArguments="x:Int32" WinPhone="-1" iOS="130" Android="130"/>
         </controls:GridView.RowHeight>
