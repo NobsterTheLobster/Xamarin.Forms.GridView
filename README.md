@@ -22,7 +22,7 @@ ON Android you can add a drawable statelist_item_background.xml to specify the a
 
 Pull To Refresh
 ----------------
-Pull to Refresh is supported and I reckon it should behave as you would expect i.e. You first set the IsPullToRefresh property to be enabled. Then you need to attach the RefreshCommand to your view model. When the user pulls down on the items control a busy animation will appear, the RefreshCommand will be exceuted and the IsRefreshing property will be set to true. When your view model has finished loading the data you need to set the IsRefreshing property back to false typically via a binding in your view model. Once the IsRefreshing property is set back to false the busy animation will disappear. 
+Pull to Refresh is supported and I reckon it should behave as you would expect i.e. You first set the IsPullToRefreshEnabled property to true. Then you need to attach the RefreshCommand to your view model. When the user pulls down on the items control a busy animation will appear, the RefreshCommand will be exceuted and the IsRefreshing property will be set to true. When your view model has finished loading the data you need to set the IsRefreshing property back to false typically via a binding in your view model. Once the IsRefreshing property is set back to false the busy animation will disappear. 
 
 DataTemplateSelector
 --------------------
@@ -40,15 +40,9 @@ There are several files in the solution but for the gridview you really only nee
 
 Nuget 
 ----------------
-Alternatively you can install the nuget package https://www.nuget.org/packages/Plugin.GridViewControl which only contains the files listed above. The nuget package is a little on the experimental side at the moment. The code is the same as in the repo but there was some structural and namespace changes. I will at some stage be pushing the nuget package to the repo as well. Note that the namespace reference should be as follows 
+Alternatively you can install the nuget package https://www.nuget.org/packages/Plugin.GridViewControl which only contains the files listed above.
 
-```
-xmlns:controls="clr-namespace:Plugin.GridViewControl.Common;assembly=Plugin.GridViewControl"
-...
-<controls:GridView .../>
-```
-
-Also there are a couple of things to note from an iOS perspective.
+There are a couple of things to note from an iOS perspective.
 
 1. The renderer doesn't appear to get loaded unless you reference it in your appdelegate.e.g.
 
