@@ -2,19 +2,20 @@
 <package >
   <metadata>
     <id>Plugin.GridViewControl</id>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <authors>NobsterTheLobster</authors>
     <owners>NobsterTheLobster</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>GridView control for Xamarin.Forms</description>
-    <releaseNotes>InitialRelease</releaseNotes>
-    <copyright>Copyright 2017</copyright>
     <tags>GridView Xamarin Xamarin.Forms</tags>
+    <summary>A bindable GridView control for Xamarin.Forms. Supports iOS, Android and UWP.</summary>
+  <projectUrl>https://github.com/NobsterTheLobster/Xamarin.Forms.GridView</projectUrl>
+     <releaseNotes>Switch to .NET standard. Compatibility with Xamarin.Forms.2.5.0.280555. See https://github.com/NobsterTheLobster/Xamarin.Forms.GridView for extras.</releaseNotes>
   </metadata>
    <files>
         <!-- Cross-platform reference assemblies -->
-		<file src="Plugin.GridViewControl\Plugin.GridViewControl\bin\Release\Plugin.GridViewControl.dll" target="lib\netstandard2.0\Plugin.GridViewControl.dll" />
-	    <file src="Plugin.GridViewControl\Plugin.GridViewControl\bin\Release\Plugin.GridViewControl.xml" target="lib\netstandard2.0\Plugin.GridViewControl.xml" />
+		<file src="Plugin.GridViewControl\Plugin.GridViewControl\bin\Release\netstandard2.0\Plugin.GridViewControl.dll" target="lib\netstandard2.0\Plugin.GridViewControl.dll" />
+	  <!--  <file src="Plugin.GridViewControl\Plugin.GridViewControl\bin\Release\netstandard2.0\Plugin.GridViewControl.xml" target="lib\netstandard2.0\Plugin.GridViewControl.xml" />-->
 
         <!-- iOS reference assemblies -->
 		<file src="Plugin.GridViewControl\Plugin.GridViewControl.iOS\bin\Release\Plugin.GridViewControl.dll" target="lib\Xamarin.iOS10\Plugin.GridViewControl.dll" />
