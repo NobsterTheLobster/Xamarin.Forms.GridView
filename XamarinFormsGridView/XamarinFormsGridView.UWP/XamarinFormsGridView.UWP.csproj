@@ -161,6 +161,10 @@
       <Project>{c9c28b88-6937-48b9-af71-e281e03241a5}</Project>
       <Name>Plugin.GridViewControl.UWP</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Plugin.GridViewControl\Plugin.GridViewControl\Plugin.GridViewControl.csproj">
+      <Project>{67f9d3a8-f71e-4428-913f-c37ae82cdb24}</Project>
+      <Name>Plugin.GridViewControl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XamarinFormsGridView\XamarinFormsGridView.csproj">
       <Project>{ce2a415e-3b66-4689-9cc6-7dc087fbe7b8}</Project>
       <Name>XamarinFormsGridView</Name>
@@ -168,10 +172,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.0.1</Version>
+      <Version>6.0.8</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>2.4.0.282</Version>
+      <Version>2.5.0.280555</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
