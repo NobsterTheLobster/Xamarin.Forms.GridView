@@ -28,6 +28,10 @@ DataTemplateSelector
 --------------------
 Due to the nature of the recycler control it is very difficult to support the datatemplateselector. I have provided a sample (Sample3) in the repo using a binding converter which I think is a valid workaround although I have not thoroughly tested it.
 
+ItemHold (long click/right click)
+--------------------
+Courtesy of https://github.com/kipters the control now supports a long click/right click action.
+
 Required Files
 ----------------
 There are several files in the solution but for the gridview you really only need the following.
