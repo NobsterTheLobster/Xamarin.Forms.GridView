@@ -68,7 +68,7 @@ namespace XamarinFormsGridView
         /// <summary>
         /// The item tapped command.
         /// </summary>
-        Command _tappedCommand, _refreshCommand;
+        Command _tappedCommand, _refreshCommand, _holdCommand;
 
         /// <summary>
         /// Interface for displaying page alerts.
@@ -93,6 +93,20 @@ namespace XamarinFormsGridView
                         );
                 }
                 return _tappedCommand;
+            }
+        }
+
+        public Command HoldCommand
+        {
+            get
+            {
+                if (_holdCommand == null)
+                {
+                    _holdCommand = new Command(
+                        async param => await Hold(param)
+                        );
+                }
+                return _holdCommand;
             }
         }
 
@@ -317,6 +331,11 @@ namespace XamarinFormsGridView
         public async Task Tapped(object item)
         {
            await _actionSheetDisplayer?.DisplayAlert("Hello", "You tapped an item:" + (item as ColorGroup).Color, "Clear");
+        }
+
+        public async Task Hold(object item)
+        {
+            await _actionSheetDisplayer?.DisplayAlert("Hello", "You hold an item:" + (item as ColorGroup).Color, "Clear");
         }
 
         /// <summary>

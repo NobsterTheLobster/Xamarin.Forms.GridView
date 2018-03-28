@@ -10,6 +10,7 @@ using Plugin.GridViewControl.iOS.Renderers;
 using Xamarin.Forms.Platform.iOS;
 using CoreGraphics;
 using System.Reflection;
+using System.Diagnostics;
 
 [assembly: ExportRenderer (typeof(GridView), typeof(GridViewRenderer))]
 namespace Plugin.GridViewControl.iOS.Renderers
@@ -94,6 +95,7 @@ namespace Plugin.GridViewControl.iOS.Renderers
             _gridCollectionView = new GridCollectionView();
             _gridCollectionView.AllowsMultipleSelection = false;
             _gridCollectionView.BackgroundColor = Element.BackgroundColor.ToUIColor();
+            _gridCollectionView.AddGestureRecognizer(new UILongPressGestureRecognizer(OnLongPress));
 
 
             _pullToRefresh = new UIRefreshControl();
@@ -147,6 +149,26 @@ namespace Plugin.GridViewControl.iOS.Renderers
 
             //Set the native control.
             SetNativeControl(_gridCollectionView);
+        }
+
+        private void OnLongPress(UILongPressGestureRecognizer gestureRecognizer)
+        {
+            if (gestureRecognizer.State != UIGestureRecognizerState.Ended)
+                return;
+
+            var point = gestureRecognizer.LocationInView(_gridCollectionView);
+
+            var indexPath = _gridCollectionView.IndexPathForItemAtPoint(point);
+            if (indexPath == null)
+            {
+                Debug.WriteLine("Couldn't find index path");
+            }
+            else
+            {
+                var cell = _gridCollectionView.CellForItem(indexPath);
+                if (cell is GridViewCell bindableCell)
+                    Element.RaiseOnItemHold(bindableCell.ViewCell.BindingContext);
+            }
         }
 
         /// <summary>

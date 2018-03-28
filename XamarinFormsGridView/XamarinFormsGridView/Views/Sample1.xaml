@@ -14,7 +14,8 @@
             RefreshCommand="{Binding RefreshCommand}"
             IsRefreshing="{Binding IsRefreshing}"
             SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
-            TappedCommand="{Binding TappedCommand}">
+            TappedCommand="{Binding TappedCommand}"
+            HoldCommand="{Binding HoldCommand}">
         <controls:GridView.ItemTemplate>
             <DataTemplate>
                 <controls:GridViewXamlCell>
