@@ -6,7 +6,6 @@
              x:Class="XamarinFormsGridView.Views.Sample1">
     <controls:GridView
 			x:Name="listView"
-            Grid.Row="1" 
             IsGroupingEnabled="false"
             ItemsSource="{Binding Colours}"
             RowHeight="130"    
@@ -23,7 +22,7 @@
                         <Grid BackgroundColor="{Binding Color}" Padding="10" >
                             <Label Text="{Binding Color}" FontSize="Small" TextColor="White" VerticalOptions="Fill"/>
                         </Grid>
-                    </Grid>
+                     </Grid>
                 </controls:GridViewXamlCell>
             </DataTemplate>
         </controls:GridView.ItemTemplate>

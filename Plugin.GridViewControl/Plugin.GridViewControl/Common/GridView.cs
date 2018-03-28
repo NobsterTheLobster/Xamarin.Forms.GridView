@@ -265,8 +265,8 @@ namespace Plugin.GridViewControl.Common
         /// <param name="e">The arguments for the event.</param>
         static void List_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            // Get object
-            var listView = (sender as ListView);
+           // Get object
+           var listView = (sender as ListView);
 
             // Get command
             ICommand command = GetTappedCommand(listView);

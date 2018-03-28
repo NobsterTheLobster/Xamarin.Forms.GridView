@@ -30,8 +30,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <controls:GridView
-			x:Name="listView"
-            Grid.Row="1" 
+            x:Name="listView"
             IsGroupingEnabled="false"
             ItemsSource="{Binding ColoursAndOtherThings}"
             RowHeight="130"    
@@ -51,7 +50,5 @@
                 </controls:GridViewXamlCell>
             </DataTemplate>
         </controls:GridView.ItemTemplate>
-
     </controls:GridView>
-
 </ContentPage>

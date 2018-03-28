@@ -36,12 +36,26 @@ namespace Plugin.GridViewControl.Droid.Renderers
         ScrollRecyclerView _recyclerView;
         SwipeRefreshLayout _pullToRefresh;
 
-
         float _startEventY;
         float _heightChange;
 
+        Context _context;
         GridLayoutManager _layoutManager;
         GridViewAdapter _adapter;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        public GridViewRenderer(Context context) : base(context)
+        {
+            _context = context;
+            AutoPackage = false;
+        }
 
         #endregion
 
@@ -60,8 +74,8 @@ namespace Plugin.GridViewControl.Droid.Renderers
             if (e.NewElement != null)
             {
                 DestroyRecyclerview();
-                CreateRecyclerView();
-                base.SetNativeControl(_pullToRefresh);
+                CreateRecyclerView(_context);
+                SetNativeControl(_pullToRefresh);
             }
 
 
@@ -109,10 +123,10 @@ namespace Plugin.GridViewControl.Droid.Renderers
             }
         }
 
-        void CreateRecyclerView()
+        void CreateRecyclerView(Context context)
         {
            
-            _recyclerView = new ScrollRecyclerView(Android.App.Application.Context);
+            _recyclerView = new ScrollRecyclerView(context);
             _recyclerView.Touch += _recyclerView_Touch;
             var scrollListener = new GridViewScrollListener(Element, _recyclerView);
             _recyclerView.AddOnScrollListener(scrollListener);
@@ -439,7 +453,7 @@ namespace Plugin.GridViewControl.Droid.Renderers
             //Only add the click handler for items (not group headers.)
             if (viewType == 0)
             {
-                view.Click += mMainView_Click;
+                view.Click += MMainView_Click;
             }
 
             //Height of the view will be taken as RowHeight for child items
@@ -458,7 +472,7 @@ namespace Plugin.GridViewControl.Droid.Renderers
             view.SetMinimumWidth(dpW);
             view.SetMinimumHeight(dpH);
 
-            var d = Resources.System.GetDrawable("statelist_item_background.xml");
+            var d =  parent.Context.GetDrawable("statelist_item_background.xml");
             view.SetBackground(d);
 
             //If not set to match parent then the view doesn't stretch to fill. 
@@ -491,7 +505,7 @@ namespace Plugin.GridViewControl.Droid.Renderers
             myHolder.ViewCellContainer.Update(item);
         }
 
-        void mMainView_Click(object sender, EventArgs e)
+        void MMainView_Click(object sender, EventArgs e)
         {
             //If there is a current item selected.
             if (_selectedItemPosition >= 0)
@@ -619,7 +633,7 @@ namespace Plugin.GridViewControl.Droid.Renderers
                     var renderer = Platform.GetRenderer(viewCell.View);
                     if (renderer == null)
                     {
-                        renderer = Platform.CreateRenderer(viewCell.View);
+                        renderer = Platform.CreateRendererWithContext(viewCell.View, context);
                         Platform.SetRenderer(viewCell.View, renderer);
 
                     }

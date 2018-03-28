@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plugin.GridViewControl</id>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <authors>NobsterTheLobster</authors>
     <owners>NobsterTheLobster</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -13,20 +13,20 @@
   </metadata>
    <files>
         <!-- Cross-platform reference assemblies -->
-		<file src="Plugin.GridViewControl\bin\Release\Plugin.GridViewControl.dll" target="lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\Plugin.GridViewControl.dll" />
-	    <file src="Plugin.GridViewControl\bin\Release\Plugin.GridViewControl.xml" target="lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\Plugin.GridViewControl.xml" />
+		<file src="Plugin.GridViewControl\Plugin.GridViewControl\bin\Release\Plugin.GridViewControl.dll" target="lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\Plugin.GridViewControl.dll" />
+	    <file src="Plugin.GridViewControl\Plugin.GridViewControl\bin\Release\Plugin.GridViewControl.xml" target="lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\Plugin.GridViewControl.xml" />
 
         <!-- iOS reference assemblies -->
-		<file src="Plugin.GridViewControl.iOS\bin\Release\Plugin.GridViewControl.dll" target="lib\Xamarin.iOS10\Plugin.GridViewControl.dll" />
-        <file src="Plugin.GridViewControl.iOS\bin\Release\Plugin.GridViewControl.iOS.dll" target="lib\Xamarin.iOS10\Plugin.GridViewControl.iOS.dll" />
+		<file src="Plugin.GridViewControl\Plugin.GridViewControl.iOS\bin\Release\Plugin.GridViewControl.dll" target="lib\Xamarin.iOS10\Plugin.GridViewControl.dll" />
+        <file src="Plugin.GridViewControl\Plugin.GridViewControl.iOS\bin\Release\Plugin.GridViewControl.iOS.dll" target="lib\Xamarin.iOS10\Plugin.GridViewControl.iOS.dll" />
 
         <!-- Android reference assemblies -->
-		<file src="Plugin.GridViewControl.Android\bin\Release\Plugin.GridViewControl.dll" target="lib\MonoAndroid10\Plugin.GridViewControl.dll" />
-        <file src="Plugin.GridViewControl.Android\bin\Release\Plugin.GridViewControl.Android.dll" target="lib\MonoAndroid10\Plugin.GridViewControl.Android.dll" />
+		<file src="Plugin.GridViewControl\Plugin.GridViewControl.Android\bin\Release\Plugin.GridViewControl.dll" target="lib\MonoAndroid10\Plugin.GridViewControl.dll" />
+        <file src="Plugin.GridViewControl\Plugin.GridViewControl.Android\bin\Release\Plugin.GridViewControl.Android.dll" target="lib\MonoAndroid10\Plugin.GridViewControl.Android.dll" />
 
         <!-- UWP reference assemblies -->
-		<file src="Plugin.GridViewControl.UWP\bin\Release\Plugin.GridViewControl.dll" target="lib\UAP10\Plugin.GridViewControl.dll" />
-        <file src="Plugin.GridViewControl.UWP\bin\Release\Plugin.GridViewControl.UWP.dll" target="lib\UAP10\Plugin.GridViewControl.UWP.dll" />
+		<file src="Plugin.GridViewControl\Plugin.GridViewControl.UWP\bin\Release\Plugin.GridViewControl.dll" target="lib\UAP10\Plugin.GridViewControl.dll" />
+        <file src="Plugin.GridViewControl\Plugin.GridViewControl.UWP\bin\Release\Plugin.GridViewControl.UWP.dll" target="lib\UAP10\Plugin.GridViewControl.UWP.dll" />
     </files>
 
 </package>

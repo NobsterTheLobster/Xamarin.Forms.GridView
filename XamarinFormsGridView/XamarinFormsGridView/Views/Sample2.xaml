@@ -6,7 +6,6 @@
              x:Class="XamarinFormsGridView.Views.Sample2">
     <controls:GridView
 			x:Name="listView"
-            Grid.Row="1" 
             IsGroupingEnabled="true"
             ItemsSource="{Binding ColoursGrouped}"
             HasUnevenRows="True"
