@@ -1,5 +1,5 @@
  # Xamarin.Forms.GridView
-A working! GridView for xamarin forms with grouping, pull to refresh and selection visual state support.
+A working! (tested with Xamarin.Forms 2.5.0.280555) GridView for xamarin forms with grouping, pull to refresh and selection visual state support.
 
 Supports UWP (ItemsPanelTemplate set to ItemsWrapGrid), Android (Recycler)  and IOS (UICollectionView) 
 
@@ -27,6 +27,10 @@ Pull to Refresh is supported and I reckon it should behave as you would expect i
 DataTemplateSelector
 --------------------
 Due to the nature of the recycler control it is very difficult to support the datatemplateselector. I have provided a sample (Sample3) in the repo using a binding converter which I think is a valid workaround although I have not thoroughly tested it.
+
+ItemHold (long click/right click)
+--------------------
+Courtesy of https://github.com/kipters the control now supports a long click/right click action.
 
 Required Files
 ----------------
