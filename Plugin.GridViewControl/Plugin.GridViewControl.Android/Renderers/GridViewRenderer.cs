@@ -387,10 +387,18 @@ namespace Plugin.GridViewControl.Droid.Renderers
             {
                 if (e.OldItems != null)
                 {
-                    foreach (var item in e.OldItems)
+                    //If there are multiple items.
+                    if (e.OldItems.Count > 1)
                     {
-                        var index = IndexOf(_items, item);
-                        NotifyItemRemoved(index);
+                        //Not very effiencent but there is no way to establish index 
+                        //of unsequential removed items without maintaining an extra 
+                        //virtual dataset which seems like more trouble then its worth.
+                        NotifyDataSetChanged();
+                    }
+                    else
+                    {
+                        //Remove the single item.
+                        NotifyItemRemoved(e.OldStartingIndex);
                     }
                 }
             }
