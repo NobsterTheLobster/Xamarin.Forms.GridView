@@ -686,13 +686,15 @@ namespace Plugin.GridViewControl.Droid.Renderers
 
                     if (size != _previousSize || !_isLaidOut)
                     {
-                        var layout = _viewCell.View as Layout<Xamarin.Forms.View>;
-
-                        if (layout != null)
+                        if (_viewCell.View is Layout layout)
                         {
                             layout.Layout(new Rectangle(0, 0, width, height));
-                            layout.ForceLayout();
-                            FixChildLayouts(layout);
+
+                            //Doesn't appear to be necessary?
+                            //layout.ForceLayout();
+                            //FixChildLayouts(layout);
+
+
                             _isLaidOut = true;
                         }
                     }
@@ -702,15 +704,12 @@ namespace Plugin.GridViewControl.Droid.Renderers
             }
         }
 
-        void FixChildLayouts(Layout<Xamarin.Forms.View> layout)
+        void FixChildLayouts(Layout layout)
         {
-            foreach (var child in layout.Children)
+            foreach (var child in layout.Children.OfType<Layout>())
             {
-                if (child is Layout<Xamarin.Forms.View>)
-                {
-                    ((Layout<Xamarin.Forms.View>)child).ForceLayout();
-                    FixChildLayouts(child as Layout<Xamarin.Forms.View>);
-                }
+                child.ForceLayout();
+                FixChildLayouts(child);
             }
         }
     }
