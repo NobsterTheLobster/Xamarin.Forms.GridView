@@ -1273,6 +1273,8 @@ namespace XamarinFormsGridView.Droid
 			global::Plugin.GridViewControl.Droid.Resource.Layout.select_dialog_singlechoice_material = global::XamarinFormsGridView.Droid.Resource.Layout.select_dialog_singlechoice_material;
 			global::Plugin.GridViewControl.Droid.Resource.Layout.support_simple_spinner_dropdown_item = global::XamarinFormsGridView.Droid.Resource.Layout.support_simple_spinner_dropdown_item;
 			global::Plugin.GridViewControl.Droid.Resource.Layout.tooltip = global::XamarinFormsGridView.Droid.Resource.Layout.tooltip;
+			global::Plugin.GridViewControl.Droid.Resource.String.ApplicationName = global::XamarinFormsGridView.Droid.Resource.String.ApplicationName;
+			global::Plugin.GridViewControl.Droid.Resource.String.Hello = global::XamarinFormsGridView.Droid.Resource.String.Hello;
 			global::Plugin.GridViewControl.Droid.Resource.String.abc_action_bar_home_description = global::XamarinFormsGridView.Droid.Resource.String.abc_action_bar_home_description;
 			global::Plugin.GridViewControl.Droid.Resource.String.abc_action_bar_up_description = global::XamarinFormsGridView.Droid.Resource.String.abc_action_bar_up_description;
 			global::Plugin.GridViewControl.Droid.Resource.String.abc_action_menu_overflow_description = global::XamarinFormsGridView.Droid.Resource.String.abc_action_menu_overflow_description;
@@ -6200,7 +6202,13 @@ namespace XamarinFormsGridView.Droid
 		
 		public partial class String
 		{
-		
+			
+			// aapt resource value: 0x7f09003d
+			public const int ApplicationName = 2131296317;
+			
+			// aapt resource value: 0x7f09003c
+			public const int Hello = 2131296316;
+			
 			// aapt resource value: 0x7f090015
 			public const int abc_action_bar_home_description = 2131296277;
 			

@@ -92,14 +92,18 @@ namespace Plugin.GridViewControl.iOS.Renderers
             }
             e.NewElement.GridViewProvider = this;
 
-            _gridCollectionView = new GridCollectionView();
-            _gridCollectionView.AllowsMultipleSelection = false;
-            _gridCollectionView.BackgroundColor = Element.BackgroundColor.ToUIColor();
+            _gridCollectionView = new GridCollectionView
+            {
+                AllowsMultipleSelection = false,
+                BackgroundColor = Element.BackgroundColor.ToUIColor()
+            };
             _gridCollectionView.AddGestureRecognizer(new UILongPressGestureRecognizer(OnLongPress));
 
 
-            _pullToRefresh = new UIRefreshControl();
-            _pullToRefresh.Enabled = Element.IsPullToRefreshEnabled;
+            _pullToRefresh = new UIRefreshControl
+            {
+                Enabled = Element.IsPullToRefreshEnabled
+            };
             _gridCollectionView.AddSubview(_pullToRefresh);
             _pullToRefresh.ValueChanged += _pullToRefresh_ValueChanged;
             _gridCollectionView.AlwaysBounceVertical = true;
@@ -256,8 +260,7 @@ namespace Plugin.GridViewControl.iOS.Renderers
                 oldElement.PropertyChanging -= ElementPropertyChanging;
                 oldElement.PropertyChanged -= ElementPropertyChanged;
                 oldElement.SizeChanged -= ElementSizeChanged;
-                var itemsSource = oldElement.ItemsSource as INotifyCollectionChanged;
-                if (itemsSource != null)
+                if (oldElement.ItemsSource is INotifyCollectionChanged itemsSource)
                 {
                     itemsSource.CollectionChanged -= DataCollectionChanged;
                 }

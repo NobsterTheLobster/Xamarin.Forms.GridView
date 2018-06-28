@@ -17,26 +17,16 @@ namespace XamarinFormsGridView.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
-            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
-            {
-                System.Diagnostics.Debug.WriteLine("AppDomain.CurrentDomain.UnhandledException: {0}. IsTerminating: {1}", e.ExceptionObject, e.IsTerminating);
-            };
+            //AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            //{
+            //    System.Diagnostics.Debug.WriteLine("AppDomain.CurrentDomain.UnhandledException: {0}. IsTerminating: {1}", e.ExceptionObject, e.IsTerminating);
+            //};
 
 
             base.OnCreate(bundle);
-
+            //Xamarin.Forms.Forms.SetFlags("FastRenderers_Experimental");
             global::Xamarin.Forms.Forms.Init(this, bundle);
-
-            try
-            {
-                LoadApplication(new App());
-
-            }
-            catch (Exception e)
-            {
-
-            }
-            
+            LoadApplication(new App());
         }
     }
 }
