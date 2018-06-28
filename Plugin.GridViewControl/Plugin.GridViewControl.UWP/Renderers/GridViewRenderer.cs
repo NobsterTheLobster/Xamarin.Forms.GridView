@@ -43,12 +43,13 @@ namespace Plugin.GridViewControl.UWP.Renderers
 
         private void OnRightTapped(object sender, RightTappedRoutedEventArgs e)
         {
+
             if (Element is Common.GridView gridView)
             {
                 var source = (FrameworkElement)e.OriginalSource;
-                var item = (GridViewXamlCell)source.DataContext;
-                var context = item.BindingContext;
-                gridView.RaiseOnItemHold(context);
+                //var item = (GridViewXamlCell)source.DataContext;
+                //var context = item.BindingContext;
+                gridView.RaiseOnItemHold(source.DataContext);
             }
         }
 
