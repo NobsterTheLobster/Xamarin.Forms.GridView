@@ -43,13 +43,18 @@ namespace Plugin.GridViewControl.UWP.Renderers
 
         private void OnRightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-
             if (Element is Common.GridView gridView)
             {
                 var source = (FrameworkElement)e.OriginalSource;
-                //var item = (GridViewXamlCell)source.DataContext;
-                //var context = item.BindingContext;
-                gridView.RaiseOnItemHold(source.DataContext);
+
+                if (source.DataContext is GridViewXamlCell cell)
+                {
+                    gridView.RaiseOnItemHold(cell.BindingContext);
+                }
+                else
+                {
+                    gridView.RaiseOnItemHold(source.DataContext);
+                }
             }
         }
 
@@ -79,7 +84,7 @@ namespace Plugin.GridViewControl.UWP.Renderers
                     //Note you will need your container to stretch
                     //along with the items panel or it will look 
                     //strange. 
-                    itemsPanel.ItemWidth = total / canBeFit;
+                    itemsPanel.ItemWidth = Math.Min(total, total / canBeFit);
                 }
             }
         }

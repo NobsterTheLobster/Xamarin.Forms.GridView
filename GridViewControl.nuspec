@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plugin.GridViewControl</id>
-    <version>1.0.10</version>
+    <version>1.0.11</version>
     <authors>NobsterTheLobster</authors>
     <owners>NobsterTheLobster</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

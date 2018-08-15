@@ -164,12 +164,20 @@ namespace Plugin.GridViewControl.Droid.Renderers
         /// <param name="e">The arguments for the event.</param>
         void _pullToRefresh_Refresh(object sender, EventArgs e)
         {
-            //If there is a command associated.
-            if (Element.RefreshCommand != null)
+            if (_pullToRefresh.Enabled)
             {
-                //Call the command.
-                Element.IsRefreshing = true;
-                Element.RefreshCommand.Execute(null);
+                //If there is a command associated.
+                if (Element.RefreshCommand != null)
+                {
+                    //Call the command.
+                    Element.IsRefreshing = true;
+                    Element.RefreshCommand.Execute(null);
+                }
+                else
+                {
+                    //Indicate to the view we are no longer refreshing.
+                    _pullToRefresh.Refreshing = false;
+                }
             }
             else
             {
@@ -564,7 +572,7 @@ namespace Plugin.GridViewControl.Droid.Renderers
             if (_items != null)
             {
                 //Get the groups within the items source.
-                var groups = _items.OfType<IEnumerable>();
+                var groups = _items.OfType<IEnumerable>().Where(grp => !(grp is string));
 
                 //If there are any groups.
                 if (groups.Any())

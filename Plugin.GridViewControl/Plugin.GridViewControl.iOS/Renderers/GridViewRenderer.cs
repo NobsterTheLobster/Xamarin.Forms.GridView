@@ -131,7 +131,8 @@ namespace Plugin.GridViewControl.iOS.Renderers
 
             //If we are dealing with groups.
             if (e.NewElement.ItemsSource != null && 
-                e.NewElement.ItemsSource.OfType<IEnumerable>().Any() && 
+                e.NewElement.ItemsSource.OfType<IEnumerable>()
+                .Any(r=> !(r is string)) && 
                 e.NewElement.GroupHeaderTemplate != null)
             {
                 //Unbox the layout.
@@ -362,7 +363,9 @@ namespace Plugin.GridViewControl.iOS.Renderers
             int numberOfItems = 0;
 
             //Get the sections.
-            var sections = Element.ItemsSource.OfType<IEnumerable>().ToList();
+            var sections = Element.ItemsSource.OfType<IEnumerable>()
+                .Where(grp => !(grp is string))
+                .ToList();
 
             //If there are any sections.
             if (sections.Any())
@@ -386,7 +389,9 @@ namespace Plugin.GridViewControl.iOS.Renderers
         public void ItemSelected(UICollectionView tableView, NSIndexPath indexPath)
         {
             //Get the sections.
-            var sections = Element.ItemsSource.OfType<IEnumerable>().ToList();
+            var sections = Element.ItemsSource.OfType<IEnumerable>()
+                .Where(grp => !(grp is string))
+                .ToList();
 
             object item;
 
@@ -405,7 +410,7 @@ namespace Plugin.GridViewControl.iOS.Renderers
 
         public int NumberOfSections(UICollectionView collectionView)
         {
-            return Math.Max(1, Element.ItemsSource.OfType<IEnumerable>().Count());
+            return Math.Max(1, Element.ItemsSource.OfType<IEnumerable>().Count(grp => !(grp is string)));
         }
 
         /// <summary>
@@ -419,7 +424,9 @@ namespace Plugin.GridViewControl.iOS.Renderers
             cellId = cellId ?? new NSString(GridViewCell.Key);
 
             //Get the sections.
-            var sections = Element.ItemsSource.OfType<IEnumerable>().ToList();
+            var sections = Element.ItemsSource.OfType<IEnumerable>()
+                .Where(grp => !(grp is string))
+                .ToList();
 
             object item;
 
@@ -476,7 +483,7 @@ namespace Plugin.GridViewControl.iOS.Renderers
                 InvokeOnMainThread(() =>
                 {
                     //If we are dealing with groups.
-                    if (Element.ItemsSource.OfType<IEnumerable>().Any() && 
+                    if (Element.ItemsSource.OfType<IEnumerable>().Any(grp => !(grp is string)) && 
                     Element.GroupHeaderTemplate != null)
                     {
                         //Unbox the layout.
