@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Plugin.GridViewControl</id>
-    <version>1.0.8</version>
+    <version>1.0.11</version>
     <authors>NobsterTheLobster</authors>
     <owners>NobsterTheLobster</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -10,7 +10,7 @@
     <tags>GridView Xamarin Xamarin.Forms</tags>
     <summary>A bindable GridView control for Xamarin.Forms. Supports iOS, Android and UWP.</summary>
   <projectUrl>https://github.com/NobsterTheLobster/Xamarin.Forms.GridView</projectUrl>
-     <releaseNotes>Switch to .NET standard. Compatibility with Xamarin.Forms.2.5.0.280555. See https://github.com/NobsterTheLobster/Xamarin.Forms.GridView for extras.</releaseNotes>
+     <releaseNotes>See https://github.com/NobsterTheLobster/Xamarin.Forms.GridView for latest info.</releaseNotes>
   </metadata>
    <files>
         <!-- Cross-platform reference assemblies -->

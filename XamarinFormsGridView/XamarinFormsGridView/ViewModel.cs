@@ -346,11 +346,8 @@ namespace XamarinFormsGridView
         public void NotifyPropertyChanged(String info)
         {
             //If the event is not nothing.
-            if (PropertyChanged != null)
-            {
-                //Fire event.
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
+            //Fire event.
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
 
         #endregion
@@ -380,11 +377,8 @@ namespace XamarinFormsGridView
         public void NotifyPropertyChanged(String info)
         {
             //If the event is not nothing.
-            if (PropertyChanged != null)
-            {
-                //Fire event.
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
+            //Fire event.
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
     }
 
@@ -424,11 +418,8 @@ namespace XamarinFormsGridView
         public void NotifyPropertyChanged(String info)
         {
             //If the event is not nothing.
-            if (PropertyChanged != null)
-            {
-                //Fire event.
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
+            //Fire event.
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
     }
   

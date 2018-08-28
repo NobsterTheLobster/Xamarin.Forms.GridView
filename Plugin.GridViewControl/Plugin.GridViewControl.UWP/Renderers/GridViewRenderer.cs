@@ -46,9 +46,15 @@ namespace Plugin.GridViewControl.UWP.Renderers
             if (Element is Common.GridView gridView)
             {
                 var source = (FrameworkElement)e.OriginalSource;
-                var item = (GridViewXamlCell)source.DataContext;
-                var context = item.BindingContext;
-                gridView.RaiseOnItemHold(context);
+
+                if (source.DataContext is GridViewXamlCell cell)
+                {
+                    gridView.RaiseOnItemHold(cell.BindingContext);
+                }
+                else
+                {
+                    gridView.RaiseOnItemHold(source.DataContext);
+                }
             }
         }
 
@@ -65,30 +71,20 @@ namespace Plugin.GridViewControl.UWP.Renderers
                 //Get the Minimum item size.
                 var itemMinSize = (double)list.GetValue(Common.GridView.MinItemWidthProperty);
 
-                //If the property is set.
-                if (itemMinSize > 0)
+                //If the property is set and the control is of expected type.
+                if (itemMinSize > 0 && Control is ListViewBase itemsControl && itemsControl.ItemsPanelRoot is ItemsWrapGrid itemsPanel)
                 {
-                    //Unbox the native control.
-                    var itemsControl = Control as ListViewBase;
+                    //Get total size (leave room for scrolling.)
+                    var total = list.Width - 10;
 
-                    //Retrieve items panel.
-                    ItemsWrapGrid itemsPanel = itemsControl.ItemsPanelRoot as ItemsWrapGrid;
+                    //How many items can be fit whole.
+                    var canBeFit = Math.Floor(total / itemMinSize);
 
-                    //If the items panel is a wrap grid.
-                    if (itemsPanel != null)
-                    {
-                        //Get total size (leave room for scrolling.)
-                        var total = list.Width - 10;
-
-                        //How many items can be fit whole.
-                        var canBeFit = Math.Floor(total / itemMinSize);
-
-                        //Set the items Panel item width appropriately.
-                        //Note you will need your container to stretch
-                        //along with the items panel or it will look 
-                        //strange. 
-                        itemsPanel.ItemWidth = total / canBeFit;
-                    }
+                    //Set the items Panel item width appropriately.
+                    //Note you will need your container to stretch
+                    //along with the items panel or it will look 
+                    //strange. 
+                    itemsPanel.ItemWidth = Math.Min(total, total / canBeFit);
                 }
             }
         }

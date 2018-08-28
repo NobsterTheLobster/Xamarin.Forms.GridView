@@ -92,14 +92,18 @@ namespace Plugin.GridViewControl.iOS.Renderers
             }
             e.NewElement.GridViewProvider = this;
 
-            _gridCollectionView = new GridCollectionView();
-            _gridCollectionView.AllowsMultipleSelection = false;
-            _gridCollectionView.BackgroundColor = Element.BackgroundColor.ToUIColor();
+            _gridCollectionView = new GridCollectionView
+            {
+                AllowsMultipleSelection = false,
+                BackgroundColor = Element.BackgroundColor.ToUIColor()
+            };
             _gridCollectionView.AddGestureRecognizer(new UILongPressGestureRecognizer(OnLongPress));
 
 
-            _pullToRefresh = new UIRefreshControl();
-            _pullToRefresh.Enabled = Element.IsPullToRefreshEnabled;
+            _pullToRefresh = new UIRefreshControl
+            {
+                Enabled = Element.IsPullToRefreshEnabled
+            };
             _gridCollectionView.AddSubview(_pullToRefresh);
             _pullToRefresh.ValueChanged += _pullToRefresh_ValueChanged;
             _gridCollectionView.AlwaysBounceVertical = true;
@@ -127,7 +131,8 @@ namespace Plugin.GridViewControl.iOS.Renderers
 
             //If we are dealing with groups.
             if (e.NewElement.ItemsSource != null && 
-                e.NewElement.ItemsSource.OfType<IEnumerable>().Any() && 
+                e.NewElement.ItemsSource.OfType<IEnumerable>()
+                .Any(r=> !(r is string)) && 
                 e.NewElement.GroupHeaderTemplate != null)
             {
                 //Unbox the layout.
@@ -256,8 +261,7 @@ namespace Plugin.GridViewControl.iOS.Renderers
                 oldElement.PropertyChanging -= ElementPropertyChanging;
                 oldElement.PropertyChanged -= ElementPropertyChanged;
                 oldElement.SizeChanged -= ElementSizeChanged;
-                var itemsSource = oldElement.ItemsSource as INotifyCollectionChanged;
-                if (itemsSource != null)
+                if (oldElement.ItemsSource is INotifyCollectionChanged itemsSource)
                 {
                     itemsSource.CollectionChanged -= DataCollectionChanged;
                 }
@@ -359,7 +363,9 @@ namespace Plugin.GridViewControl.iOS.Renderers
             int numberOfItems = 0;
 
             //Get the sections.
-            var sections = Element.ItemsSource.OfType<IEnumerable>().ToList();
+            var sections = Element.ItemsSource.OfType<IEnumerable>()
+                .Where(grp => !(grp is string))
+                .ToList();
 
             //If there are any sections.
             if (sections.Any())
@@ -383,7 +389,9 @@ namespace Plugin.GridViewControl.iOS.Renderers
         public void ItemSelected(UICollectionView tableView, NSIndexPath indexPath)
         {
             //Get the sections.
-            var sections = Element.ItemsSource.OfType<IEnumerable>().ToList();
+            var sections = Element.ItemsSource.OfType<IEnumerable>()
+                .Where(grp => !(grp is string))
+                .ToList();
 
             object item;
 
@@ -402,7 +410,7 @@ namespace Plugin.GridViewControl.iOS.Renderers
 
         public int NumberOfSections(UICollectionView collectionView)
         {
-            return Math.Max(1, Element.ItemsSource.OfType<IEnumerable>().Count());
+            return Math.Max(1, Element.ItemsSource.OfType<IEnumerable>().Count(grp => !(grp is string)));
         }
 
         /// <summary>
@@ -416,7 +424,9 @@ namespace Plugin.GridViewControl.iOS.Renderers
             cellId = cellId ?? new NSString(GridViewCell.Key);
 
             //Get the sections.
-            var sections = Element.ItemsSource.OfType<IEnumerable>().ToList();
+            var sections = Element.ItemsSource.OfType<IEnumerable>()
+                .Where(grp => !(grp is string))
+                .ToList();
 
             object item;
 
@@ -473,7 +483,7 @@ namespace Plugin.GridViewControl.iOS.Renderers
                 InvokeOnMainThread(() =>
                 {
                     //If we are dealing with groups.
-                    if (Element.ItemsSource.OfType<IEnumerable>().Any() && 
+                    if (Element.ItemsSource.OfType<IEnumerable>().Any(grp => !(grp is string)) && 
                     Element.GroupHeaderTemplate != null)
                     {
                         //Unbox the layout.
