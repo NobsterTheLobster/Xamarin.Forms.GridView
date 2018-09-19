@@ -76,12 +76,20 @@ namespace Plugin.GridViewControl.Droid.Renderers
                 DestroyRecyclerview();
                 CreateRecyclerView(_context);
                 SetNativeControl(_pullToRefresh);
+                // after SetNativeControl, _pullToRefresh.Enabled was set the value of Element.IsEnabled;
+                UpdateIsPullToRefreshEnabled();
             }
 
 
             //TODO unset
             //			this.Unbind (e.OldElement);
             //			this.Bind (e.NewElement);
+        }
+        
+        private void UpdateIsPullToRefreshEnabled()
+        {
+            if(_pullToRefresh != null)
+                _pullToRefresh.Enabled = Element.IsPullToRefreshEnabled;
         }
 
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -149,7 +157,7 @@ namespace Plugin.GridViewControl.Droid.Renderers
 
             //Enable/Disable pull to refresh.
             _pullToRefresh.Enabled = Element.IsPullToRefreshEnabled;
-
+            
             //Set the current refresh status.
             _pullToRefresh.Refreshing = Element.IsRefreshing;
 
