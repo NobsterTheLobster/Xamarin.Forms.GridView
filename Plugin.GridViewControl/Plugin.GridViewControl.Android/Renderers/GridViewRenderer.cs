@@ -200,7 +200,7 @@ namespace Plugin.GridViewControl.Droid.Renderers
         void UpdateGridLayout()
         {
             // Make sure that MinItemWidth is never 0.
-            double minWidth = Element.MinItemWidth > 0 ? Element.MinItemWidth : 1;
+            double minWidth = Element.MinItemWidth > 0 ? Element.MinItemWidth : 100;
 
             //Get the span count.
             var spanCount = (int)Math.Max(1, Math.Floor(Element.Width / minWidth));
