@@ -199,8 +199,11 @@ namespace Plugin.GridViewControl.Droid.Renderers
         /// </summary>
         void UpdateGridLayout()
         {
+            // Make sure that MinItemWidth is never 0.
+            double minWidth = Element.MinItemWidth > 0 ? Element.MinItemWidth : 1;
+
             //Get the span count.
-            var spanCount = (int)Math.Max(1, Math.Floor(Element.Width / Element.MinItemWidth));
+            var spanCount = (int)Math.Max(1, Math.Floor(Element.Width / minWidth));
 
             //I found that if I don't re-iniitalize a new layout manager 
             //each time the span count should change then the items don't render.
