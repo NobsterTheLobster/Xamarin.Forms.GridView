@@ -603,9 +603,9 @@ namespace Plugin.GridViewControl.Droid.Renderers
         {
             get
             {
-                return _flattenedItems != null ? 
-                    _flattenedItems.Count() : 
-                    Items.Cast<object>().Count();
+                if (_flattenedItems != null) return _flattenedItems.Count();
+                if(Items != null) return Items.Cast<object>().Count();
+                return 0;
             }
 
         }
