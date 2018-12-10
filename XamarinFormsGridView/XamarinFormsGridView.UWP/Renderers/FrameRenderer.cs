@@ -36,7 +36,7 @@ namespace XamarinFormsGridView.UWP.Renderers
 
             //Set the corner radius of the control to nothing.
             //The native control for frame in windows is simply border.
-            Control.CornerRadius = new CornerRadius(0);
+            Control.CornerRadius = new Windows.UI.Xaml.CornerRadius(0);
             Control.Background = Windows.UI.Xaml.Application.Current.Resources["SystemControlPageBackgroundChromeLowBrush"] as SolidColorBrush;
 
             //Remove event handler.
