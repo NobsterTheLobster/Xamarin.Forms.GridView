@@ -76,12 +76,20 @@ namespace Plugin.GridViewControl.Droid.Renderers
                 DestroyRecyclerview();
                 CreateRecyclerView(_context);
                 SetNativeControl(_pullToRefresh);
+                // after SetNativeControl, _pullToRefresh.Enabled was set the value of Element.IsEnabled;
+                UpdateIsPullToRefreshEnabled();
             }
 
 
             //TODO unset
             //			this.Unbind (e.OldElement);
             //			this.Bind (e.NewElement);
+        }
+        
+        private void UpdateIsPullToRefreshEnabled()
+        {
+            if(_pullToRefresh != null)
+                _pullToRefresh.Enabled = Element.IsPullToRefreshEnabled;
         }
 
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -149,7 +157,7 @@ namespace Plugin.GridViewControl.Droid.Renderers
 
             //Enable/Disable pull to refresh.
             _pullToRefresh.Enabled = Element.IsPullToRefreshEnabled;
-
+            
             //Set the current refresh status.
             _pullToRefresh.Refreshing = Element.IsRefreshing;
 
@@ -191,8 +199,11 @@ namespace Plugin.GridViewControl.Droid.Renderers
         /// </summary>
         void UpdateGridLayout()
         {
+            // Make sure that MinItemWidth is never 0.
+            double minWidth = Element.MinItemWidth > 0 ? Element.MinItemWidth : 100;
+
             //Get the span count.
-            var spanCount = (int)Math.Max(1, Math.Floor(Element.Width / Element.MinItemWidth));
+            var spanCount = (int)Math.Max(1, Math.Floor(Element.Width / minWidth));
 
             //I found that if I don't re-iniitalize a new layout manager 
             //each time the span count should change then the items don't render.
@@ -595,9 +606,9 @@ namespace Plugin.GridViewControl.Droid.Renderers
         {
             get
             {
-                return _flattenedItems != null ? 
-                    _flattenedItems.Count() : 
-                    Items.Cast<object>().Count();
+                if (_flattenedItems != null) return _flattenedItems.Count();
+                if(Items != null) return Items.Cast<object>().Count();
+                return 0;
             }
 
         }
