@@ -11,7 +11,7 @@
     <NoWarn>1701;1702;1705;4014;1998</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="3.1.0.583944" />
+    <PackageReference Include="Xamarin.Forms" Version="3.3.0.967583" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Plugin.GridViewControl\Plugin.GridViewControl\Plugin.GridViewControl.csproj" />
