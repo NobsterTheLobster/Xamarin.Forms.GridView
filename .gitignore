@@ -45,3 +45,6 @@
 /.vs/ProjectSettings.json
 /.vs/slnx.sqlite
 /.vs/VSWorkspaceState.json
+/Plugin.GridViewControl/Plugin.GridViewControl.iOS/Plugin.GridViewControl.iOS.csproj.user
+/UITests
+/XamarinFormsGridView/XamarinFormsGridView.iOS/obj/iPhone/Ad-Hoc
